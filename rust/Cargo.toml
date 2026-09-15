@@ -1,0 +1,15 @@
+[package]
+name = "meanders"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["arbitrary_precision", "raw_value"] }
+num-bigint = "0.4"
+sha2 = "0.11"
+
+[dev-dependencies]
+proptest = "1"

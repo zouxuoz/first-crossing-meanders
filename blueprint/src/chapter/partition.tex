@@ -1,0 +1,83 @@
+\section{The first-crossing partition}
+\label{sec:partition}
+
+Fix $n\ge1$ and a threshold $1\le K\le n$. For $(P,Q)\in\NC_n^2$ define the
+\emph{grade} after $j$ points by
+\[
+ k_j=\frac{h_P(j)+h_Q(j)}{2}=j-c_P(j)-c_Q(j).
+\]
+Since $h_P(j)\equiv h_Q(j)\equiv j\pmod2$, the grade is an integer; it starts and
+ends at $0$, and each point changes it by $-1$, $0$ or $+1$ according to the two
+letters $DD$, $UD/DU$, $UU$ read at that point.
+
+\begin{definition}[LOW and HIGH sectors]
+\label{def:sectors}
+\lean{Meanders.FirstCrossing.Sector, Meanders.FirstCrossing.InSector}
+\leanok
+% Root definition: no earlier statement dependencies.
+The pair $(P,Q)$ is \LOW\ if $k_j<K$ for all $0\le j\le 2n$. Otherwise let
+$L$ be the least index with $k_L\ge K$ and put $u=h_P(L)$, $v=h_Q(L)$; then
+$(P,Q)$ belongs to the \HIGH\ sector $(L,u,v)$.
+\end{definition}
+
+\begin{lemma}[Partition and admissible sectors]
+\label{lem:partition}
+\lean{Meanders.FirstCrossing.firstHeightPartition, Meanders.FirstCrossing.inSector_high_admissible, Meanders.FirstCrossing.Admissible.delta_le}
+\leanok
+\uses{def:sectors}
+Every $(P,Q)\in\NC_n^2$ is either \LOW\ or in exactly one \HIGH\ sector. A
+nonempty \HIGH\ sector $(L,u,v)$ satisfies
+\[
+ u+v=2K,\qquad u,v\ge1,\qquad u,v\le\min(L,2n-L),\qquad u\equiv v\equiv L\pmod2,
+\]
+and $\Delta:=|L-n|\le d:=n-K$. There are $O(n^{2})$ admissible triples.
+\end{lemma}
+
+\begin{proof}
+\leanok
+The first index $L$ with $k_L\ge K$ is unique, and since the grade moves by at
+most one per point, $k_{L-1}=K-1$ and $k_L=K$, whence $u+v=2K$; the step into
+$L$ must raise both heights, so the two letters at point $L-1$ are $UU$ and
+$u,v\ge1$. A height after $L$ points is at most $L$, and since it must return
+to $0$ in the remaining $2n-L$ points it is at most $2n-L$; parity follows from
+$h(j)\equiv j$. Since $2K=u+v\le2\min(L,2n-L)$, the shorter half has length at least $K$,
+which is $\Delta\le n-K$. Choosing $L$ and $u$ determines $v$.
+\end{proof}
+
+The partition is imposed on \emph{all} ordered pairs before connectivity. Each
+branch will be enumerated natively, that is, by extending partial source words
+letter by letter, never by listing complete matchings and filtering. The
+\LOW\ branch is a height-bounded version of the classical transfer
+(\cref{sec:carrier}). The point of the \HIGH\ sectors is that their metadata
+$(L,u,v)$ fixes, for each of $P$ and $Q$, the number of arches crossing the cut
+at $L$ and hence the exact number of closing endpoints on each side of the cut.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=0.38cm,y=0.42cm,>=Stealth]
+ \draw[->] (0,0) -- (15,0) node[right] {$j$};
+ \draw[->] (0,0) -- (0,4.2) node[above] {$k_j$};
+ \draw[dashed] (0,3) -- (15,3) node[right] {$K$};
+ \draw[thick] (0,0) -- (1,1) -- (2,1) -- (3,1) -- (4,2) -- (5,1) -- (6,1) -- (7,1) -- (8,1) -- (9,1) -- (10,1) -- (11,1) -- (12,2) -- (13,1) -- (14,0);
+ \node[below] at (7,-0.3) {\small \LOW: $k_j<K$ at every cut};
+\end{tikzpicture}
+\hspace{0.4cm}
+\begin{tikzpicture}[x=0.38cm,y=0.42cm,>=Stealth]
+ \draw[->] (0,0) -- (15,0) node[right] {$j$};
+ \draw[->] (0,0) -- (0,4.2) node[above] {$k_j$};
+ \draw[dashed] (0,3) -- (15,3) node[right] {$K$};
+ \draw[thick] (0,0) -- (1,1) -- (2,2) -- (3,3);
+ \draw[thick,gray] (3,3) -- (4,2) -- (5,1) -- (6,1) -- (7,1) -- (8,0) -- (9,1) -- (10,2) -- (11,1) -- (12,0) -- (13,1) -- (14,0);
+ \fill (3,3) circle (2.5pt);
+ \draw[dotted] (3,0) -- (3,3);
+ \node[below] at (3,-0.2) {\small $L$};
+ \node[below] at (8.5,-0.9) {\small \HIGH\ sector $(L,u,v)=(3,3,3)$};
+\end{tikzpicture}
+\caption{Grade trajectories $k_j=(h_P(j)+h_Q(j))/2$ for two pairs of order
+$n=7$ with $K=3$. Left: the \LOW\ pair
+$P=UUDUDDUUDDUUDD$, $Q=UDUUDUDDUUDUDD$. Right: the \HIGH\ pair
+$P=UUUDDUDDUUDDUD$, $Q=UUUDDDUDUUDDUD$, whose first hit is at $L=3$ with the
+last step $UU$; only the prefix up to $L$ is subject to the first-hit test.
+At odd $j$ both heights are odd, so $k_j\ge1$.}
+\label{fig:partition}
+\end{figure}

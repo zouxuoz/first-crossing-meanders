@@ -1,0 +1,35 @@
+\section{Port-bound identities}
+\label{app:ports}
+
+Fix one owner with cut height $w$, half lengths $H\ge S$ (long and short),
+budgets $A_H=(H-w)/2$, $A_S=(S-w)/2$, so $A_H-A_S=\Delta$ and $A_H+A_S=n-w$.
+By \eqref{eq:ports} the retained ports are $p=h_H+h_S-2\min(f_H,f_S)$.
+
+\paragraph{Completed pair.}
+After $j$ pairs, $i_H=\Delta+j$ and $i_S=j$, so $I:=i_H-A_H=i_S-A_S$ and
+$f_H=\max(0,I-c_H)$, $f_S=\max(0,I-c_S)$. With $c_{\max}=\max(c_H,c_S)$ and
+$c_{\min}=\min(c_H,c_S)$ we have $\min(f_H,f_S)=\max(0,I-c_{\max})$ and
+$h_H+h_S=A_H+A_S+2I-2(c_{\max}+c_{\min})$, hence
+\[
+ p=A_H+A_S-2c_{\min}+2\bigl(I-c_{\max}-\max(0,I-c_{\max})\bigr)
+  =A_H+A_S-2c_{\min}-2\max(0,c_{\max}-I)\le A_H+A_S .
+\]
+This covers $I<0$ and the cases where one or both emissions vanish.
+
+\paragraph{Final skirt.}
+The short half is complete, so $c_S=A_S$, $h_S=w$, $f_S=w$. Let $t\le\Delta$
+long points be unread with $r\le t$ of the long budget remaining, so
+$h_H=w-t+2r$ and $f_H=\max(0,w-t+r)\le w$. Then
+\[
+ p=w-t+2r+w-2\max(0,w-t+r)=t-2\max(0,t-w-r)\le t .
+\]
+Both bounds are attained for suitable feasible parameters; e.g.\ $r=t$ gives
+$p=t$ in the final skirt.
+
+\paragraph{Temporary excess.}
+A completed pair leaves at most $2d$ ports. The next long point adds two before
+its joins, giving $2d+2$ in the stored state between the two points of a pair;
+the following short point can hold $2d+4$ before its forced joins return the
+count to at most $2d$.
+
+\clearpage

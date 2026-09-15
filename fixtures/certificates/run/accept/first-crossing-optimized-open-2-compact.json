@@ -1,0 +1,88 @@
+{
+  "kind": "run",
+  "version": 1,
+  "profile": "compact",
+  "problem": "open",
+  "algorithm": "first_crossing_optimized",
+  "n": 2,
+  "count": 1,
+  "representation": "first-crossing-lower-jet",
+  "layers": [
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "765bdb3b1731b5a3b835cb6bac6476050165b0a58f4d709da65de5c7bb74d749"
+    },
+    {
+      "rows": 0,
+      "bytes": 0,
+      "ordinary": 0,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "rows": 0,
+      "bytes": 0,
+      "ordinary": 0,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "765bdb3b1731b5a3b835cb6bac6476050165b0a58f4d709da65de5c7bb74d749"
+    },
+    {
+      "rows": 1,
+      "bytes": 16,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "99dbf6ed51c82c6f3ad1f9d19735317e1f6af15e6e55fb2d1ddbe655052f45ee"
+    },
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "765bdb3b1731b5a3b835cb6bac6476050165b0a58f4d709da65de5c7bb74d749"
+    }
+  ],
+  "root": "a9eecff1182e6d9cb724b1f1aa29054b29ea8b317e4b1441fe11d60fb1f44192",
+  "firstCrossing": {
+    "nativeOrder": 1,
+    "threshold": 1,
+    "closed": 1,
+    "openEven": 1,
+    "sectors": [
+      {
+        "sector": {
+          "kind": "low"
+        },
+        "ordinary": 0,
+        "lowerReturns": 0,
+        "bonusContribution": 0
+      },
+      {
+        "sector": {
+          "kind": "high",
+          "cut": 1,
+          "upper": 1,
+          "lower": 1
+        },
+        "ordinary": 1,
+        "lowerReturns": 0,
+        "bonusContribution": 1
+      }
+    ]
+  }
+}

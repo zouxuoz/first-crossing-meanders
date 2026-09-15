@@ -1,0 +1,78 @@
+\clearpage
+\section{Lean declaration map}
+\label{app:lean}
+
+Names are in namespace \texttt{Meanders.FirstCrossing} unless stated. The
+``paper'' column identifies the statement supported by each group of formal
+declarations. The correspondence is not always statement identity: the formal carrier bounds of
+\cref{prop:carrier} have looser polynomial prefactors, the formal width
+theorem for \cref{lem:highwidth} is the uniform bound $2(n-K)+2$ rather than
+every row of its table, and \cref{thm:cost}, \cref{cor:balance} and the
+resource clause of \cref{thm:main} have no formal counterpart.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{0pt}
+\medskip
+\noindent
+\begin{tabular}{@{}p{3.3cm}@{\hspace{1em}}p{\dimexpr\linewidth-3.3cm-1em\relax}@{}}
+\toprule
+paper & supporting formal declarations \\
+\midrule
+\cref{lem:partition} &
+  \raggedright \lean{Meanders.FirstCrossing.firstHeightPartition}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Source.lean\#L155}{\nolinkurl{firstHeightPartition}}\par
+  \lean{Meanders.FirstCrossing.inSector_high_admissible}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Schedule.lean\#L13}{\nolinkurl{inSector_high_admissible}}\par
+  \lean{Meanders.FirstCrossing.Admissible.delta_le}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Schedule.lean\#L50}{\nolinkurl{Admissible.delta_le}} \tabularnewline[3pt]
+\cref{lem:cut} &
+  \raggedright \lean{Meanders.FirstCrossing.asymmetricCutEquiv}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Cut.lean\#L195}{\nolinkurl{asymmetricCutEquiv}}\par
+  \lean{Meanders.FirstCrossing.BallotHalf.down_budget}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Cut.lean\#L40}{\nolinkurl{BallotHalf.down_budget}}\par
+  \lean{Meanders.FirstCrossing.through_pair_ordinal}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Cut.lean\#L175}{\nolinkurl{through_pair_ordinal}} \tabularnewline[3pt]
+\cref{lem:forced} &
+  \raggedright \lean{Meanders.FirstCrossing.forcedPrefix_exact}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/ForcedPrefix.lean\#L321}{\nolinkurl{forcedPrefix_exact}}\par
+  \lean{Meanders.FirstCrossing.forcedOpenings_card}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/ForcedPrefix.lean\#L349}{\nolinkurl{forcedOpenings_card}} \tabularnewline[3pt]
+\cref{cor:fifo} &
+  \raggedright \lean{Meanders.FirstCrossing.forcedFIFO_sound}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Interpretation/FIFO.lean\#L330}{\nolinkurl{forcedFIFO_sound}}\par
+  \lean{Meanders.FirstCrossing.emitted_next_between}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Geometry.lean\#L37}{\nolinkurl{emitted_next_between}} \tabularnewline[3pt]
+\cref{lem:seams} &
+  \raggedright \lean{Meanders.FirstCrossing.adjacentCup_representsPaths}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Pairing.lean\#L107}{\nolinkurl{adjacentCup_representsPaths}}\par
+  \lean{Meanders.FirstCrossing.adjacentCap_representsPaths}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Pairing.lean\#L163}{\nolinkurl{adjacentCap_representsPaths}}\par
+  \lean{Meanders.FirstCrossing.cyclicCheck_iff_noncrossing}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Codec.lean\#L476}{\nolinkurl{cyclicCheck_iff_noncrossing}} \tabularnewline[3pt]
+\cref{lem:filter} &
+  \raggedright \lean{Meanders.FirstCrossing.firstHeightCounters}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Interpretation/FIFO.lean\#L44}{\nolinkurl{firstHeightCounters}}\par
+  \lean{Meanders.FirstCrossing.Source.prefix_allowed}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Interpretation/SourceStep.lean\#L55}{\nolinkurl{Source.prefix_allowed}} \tabularnewline[3pt]
+\cref{lem:cycle} &
+  \raggedright \lean{Meanders.FirstCrossing.saturatedComponent_permanent}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Surgery/Closure.lean\#L60}{\nolinkurl{saturatedComponent_permanent}}\par
+  \lean{Meanders.FirstCrossing.acceptedSourceEquiv}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Correctness/ClosedBridge.lean\#L197}{\nolinkurl{acceptedSourceEquiv}}\par
+  \lean{Meanders.FirstCrossing.CoversProcessed.connected_of_one_cycle}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Surgery/Coverage.lean\#L118}{\nolinkurl{CoversProcessed.connected_of_one_cycle}} \tabularnewline[3pt]
+\cref{lem:future} &
+  \raggedright \lean{Meanders.FirstCrossing.stateFutureEquiv}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Correctness/Future.lean\#L165}{\nolinkurl{stateFutureEquiv}} \tabularnewline[3pt]
+\cref{lem:lowwidth} &
+  \raggedright \lean{Meanders.FirstCrossing.low_geometry_port_bound}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/PortBound.lean\#L127}{\nolinkurl{low_geometry_port_bound}} \tabularnewline[3pt]
+\cref{lem:highwidth}\newline (uniform bound) &
+  \raggedright \lean{Meanders.FirstCrossing.high_geometry_port_bound}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/PortBound.lean\#L155}{\nolinkurl{high_geometry_port_bound}} \tabularnewline[3pt]
+\cref{prop:carrier}\newline (looser constants) &
+  \raggedright \lean{Meanders.FirstCrossing.carrierCard_le}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Bounds.lean\#L130}{\nolinkurl{carrierCard_le}}\par
+  \lean{Meanders.FirstCrossing.low_carrierCard_le}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Bounds.lean\#L165}{\nolinkurl{low_carrierCard_le}}\par
+  \lean{Meanders.FirstCrossing.high_carrierCard_le}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Bounds.lean\#L172}{\nolinkurl{high_carrierCard_le}} \tabularnewline[3pt]
+\cref{lem:exterior} &
+  \raggedright \lean{Meanders.FirstCrossing.exteriorArchCutEquiv}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Exterior.lean\#L361}{\nolinkurl{exteriorArchCutEquiv}}\par
+  \lean{Meanders.FirstCrossing.exteriorCount_cut}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Exterior.lean\#L370}{\nolinkurl{exteriorCount_cut}}\par
+  \lean{Meanders.FirstCrossing.exteriorCut_reflection}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Original/Exterior.lean\#L502}{\nolinkurl{exteriorCut_reflection}} \tabularnewline[3pt]
+\cref{thm:joint} &
+  \raggedright \lean{Meanders.FirstCrossing.jointLayer_invariant}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Correctness/JointLayer.lean\#L123}{\nolinkurl{jointLayer_invariant}}\par
+  \lean{Meanders.FirstCrossing.AcceptedWord.event_exterior}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Correctness/AcceptedWeight.lean\#L100}{\nolinkurl{AcceptedWord.event_exterior}}\par
+  \lean{Meanders.FirstCrossing.evaluateJoint_correct}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Correctness/JointCorrect.lean\#L20}{\nolinkurl{evaluateJoint_correct}}\par
+  \lean{Meanders.FirstCrossing.count_eq}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Algorithms/FirstCrossing.lean\#L7}{\nolinkurl{count_eq}} \tabularnewline[3pt]
+\cref{cor:open} &
+  \raggedright \lean{Meanders.FirstCrossing.count_open_even}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Eval.lean\#L144}{\nolinkurl{count_open_even}}\par
+  \lean{Meanders.FirstCrossing.count_open_odd}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Models/FirstCrossing/Native/Eval.lean\#L138}{\nolinkurl{count_open_odd}} \tabularnewline[3pt]
+identities \eqref{eq:odd},\eqref{eq:even} &
+  \raggedright \lean{Meanders.openMeanderNumber_odd}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Problems/Open.lean\#L76}{\nolinkurl{Meanders.openMeanderNumber_odd}}\par
+  \lean{Meanders.openMeanderNumber_even}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Problems/Open.lean\#L84}{\nolinkurl{Meanders.openMeanderNumber_even}} \tabularnewline[3pt]
+certificates &
+  \raggedright \lean{Meanders.Certify.FirstCrossingRun.check_joint_correct}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Certify/FirstCrossing/Correct.lean\#L44}{\nolinkurl{Meanders.Certify.FirstCrossingRun.check_joint_correct}}\par
+  \lean{Meanders.Certified.first_crossing_open_n4}\href{https://github.com/zouxuoz/first-crossing-meanders/blob/v1.0-preprint/Meanders/Certify/Examples/FirstCrossingOpen4.lean\#L34}{\nolinkurl{Meanders.Certified.first_crossing_open_n4}} \tabularnewline[3pt]
+\bottomrule
+\end{tabular}
+\par
+\endgroup

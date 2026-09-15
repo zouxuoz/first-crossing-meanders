@@ -1,0 +1,4 @@
+# Pinned so `cargo clippy -D warnings` in CI cannot break on a new stable release.
+[toolchain]
+channel = "1.98.0"
+components = ["clippy", "rustfmt"]

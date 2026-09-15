@@ -1,0 +1,53 @@
+\section{Related work and positioning}
+\label{sec:related}
+
+Transfer-matrix enumeration of meanders was introduced by Jensen
+\cite{Jensen2000}, whose algorithm already uses planar connectivity states,
+four local updates per crossing, weighted state merging, terminal-only
+closure, and pruning by remaining crossings; the \LOW\ branch is a
+height-restricted instance of this method. Di Francesco, Guitter and Jacobsen
+\cite{DFGJ2000} develop a chronological transfer whose connectivity states
+are organized by ballot numbers, with a stage-dependent inventory of states,
+an explicit ordering, remaining-bridge constraints that prune states which
+cannot be completed within the remaining crossings, and an estimate of the
+inventory's post-midpoint peak and overall growth. The actual distinction
+from the present work is elsewhere: their height counts processed arches
+across the slit in a connectivity representation, whereas the partition here
+is by the original combined source grade $k_j$; and they do not give the
+first-hit complementary construction of \cref{sec:partition,sec:carrier} or
+a proved $\Ostar(2^{n})$ bound. Jensen's recent talk \cite{Jensen2025} discusses future-connectivity
+pruning and midpoint statistics and again reports signature growth near
+$2.5^{n}$ as a fitted observation, not a proved bound. Planar link patterns and their local composition are classical
+\cite{DFGG1997TL}; stack-based path joining and remaining-endpoint pruning
+appear in exhaustive generation \cite{BobierSawada2010,SawadaLi2012}; Jacobsen
+and Zinn-Justin \cite{JacobsenZinnJustin2002} encode knot-diagram slices by
+left connectivity, right enclosing arches and an active line. Open meanders
+without a persistent free-end coordinate have software precedent
+\cite{Howroyd2015}. The identities \eqref{eq:odd} and \eqref{eq:even} are
+explicit in La Croix \cite{LaCroix2003}. Determinantal approaches \cite{DiFrancesco1998} and structural
+decompositions \cite{Belousov2026,CoriHetyei2024} give exact expressions or
+factorizations but no evaluator with a proved binary bound. Alepis
+\cite{Alepis2026} (version~2) gives, besides an explicit Catalan
+face-factorized formula, an exact compact frontier transfer for closed
+meanders, an analysis of its reachable state classes, and a proof that the
+depth-pruned state class grows like $\varphi^{2}\approx2.618$ to the power
+of the order; that work itself distinguishes this state-cardinality result
+from a complete bit-complexity theorem. What the present paper adds relative
+to it is the first-hit partition, the budget-forced early joins, and the
+uniform all-stage complementary bound $\Ostar(4^{n-K})$ for the \HIGH\
+branch, which together give the binary bound.
+
+Relative to this literature, the cut bijection, the forced-prefix inequality and
+the exterior identity are elementary consequences of stack discipline and
+nesting, and the first-moment observer is ordinary generating-function algebra.
+What we have not found elsewhere is the package: a disjoint partition by the
+first crossing of the combined original height, an asymmetric schedule whose
+budgets make the emitted prefix exact, early joins that keep the retained
+boundary within $2(n-K)+O(1)$ ports at every stage, and a key of polynomially
+many counters plus one noncrossing pairing that preserves labelled successor
+multiplicities. Together these give the constructible complementary bound
+$\Ostar(4^{n-K})$, and with the \LOW\ complement the $\Ostar(2^{n})$ theorem. We
+know of no earlier unrestricted exact closed-counting algorithm with this bound;
+this is an assessment of the literature we inspected, not a claim of worldwide
+priority, and it does not concern practical speed. Polynomial-time evaluation
+remains open.

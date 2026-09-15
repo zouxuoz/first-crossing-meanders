@@ -1,0 +1,66 @@
+\section{Preliminaries}
+\label{sec:prelim}
+
+\paragraph{Matchings and Dyck words.}
+Let $\NC_n$ be the set of noncrossing perfect matchings of the ordered points
+$0,1,\dots,2n-1$; $|\NC_n|=\Cat_n=\frac{1}{n+1}\binom{2n}{n}\le4^{n}$.
+An \emph{arch} $(a,b)$, $a<b$, of $P\in\NC_n$ has an opening endpoint $a$ and a
+closing endpoint $b$. Reading the endpoints left to right and writing $U$ for an
+opening and $D$ for a closing endpoint gives the Dyck word $w_P\in\{U,D\}^{2n}$;
+this is a bijection between $\NC_n$ and Dyck words of length $2n$. For
+$0\le j\le2n$ let $c_P(j)$ be the number of closing endpoints among the first
+$j$ points and let
+\[
+ h_P(j)=j-2c_P(j)
+\]
+be the \emph{height} after $j$ points, so $h_P(0)=h_P(2n)=0$ and
+$h_P(j)\ge0$. The height $h_P(j)$ is the number of arches of $P$ that
+\emph{cross the cut} between points $j-1$ and $j$.
+
+\paragraph{Closed meanders.}
+An ordered pair $(P,Q)\in\NC_n\times\NC_n$ has an \emph{upper} matching $P$ and a
+\emph{lower} matching $Q$. Its overlay is the $2$-regular multigraph on the $2n$
+points with edge multiset $P\uplus Q$; a common arch of $P$ and $Q$ contributes
+two parallel edges, so for $n=1$ the unique pair is a valid two-edge cycle. The
+overlay is a disjoint union of cycles. The pair is a \emph{closed meander} when
+the overlay is connected, and for $n\ge1$
+\[
+ \Closed(n)=\#\{(P,Q)\in\NC_n^2:\ P\uplus Q\text{ is connected}\}=M_n .
+\]
+No rotation, reflection or upper/lower exchange is quotiented out. We set
+$\Closed(0)=0$ by convention.
+
+\paragraph{Exterior arches and open meanders.}
+An arch $(a,b)$ of $Q$ is \emph{exterior} if no arch $(c,d)$ of $Q$ satisfies
+$c<a<b<d$. Write $\Ext(Q)$ for the set of exterior arches and $e(Q)=|\Ext(Q)|$.
+An open meander with $m$ crossings is an open curve crossing the line at $m$
+points, up to homeomorphism, with $\Open(0)=1$. We use the standard
+combinatorial description of these objects (see \cite[\S2.1]{LaCroix2003}):
+\begin{align}
+ \Open(2n+1)&=\Closed(n+1), \label{eq:odd}\\
+ \Open(2n)&=\sum_{(P,Q)\ \text{closed meander of order }n} e(Q)\qquad(n\ge1).
+ \label{eq:even}
+\end{align}
+For \eqref{eq:odd}, close the two rays of an open meander with $2n+1$
+crossings through a point at infinity, creating one additional crossing. For
+\eqref{eq:even}, an open meander with $2n$ crossings has both rays on the same
+side of the line; drawing them on the lower side and joining them produces a
+closed meander together with a distinguished lower arch that is exterior, and
+conversely deleting any exterior lower arch of a closed meander leaves a
+connected open curve. Deleting one edge of a cycle never disconnects it, so no
+further connectivity condition and no division by two is needed. Both
+identities are proved in the accompanying Lean development
+(\lean{Meanders.openMeanderNumber_odd}\texttt{Meanders.openMeanderNumber\_odd}, \lean{Meanders.openMeanderNumber_even}\texttt{Meanders.openMeanderNumber\_even})
+for the standard combinatorial models: odd open meanders are defined there
+in compactified form as connected matching pairs, and even ones as matching
+pairs with a marked exterior lower arch whose deletion leaves a connected
+graph. The formal development counts these combinatorial objects; it does not
+classify planar curves up to isotopy.
+
+\paragraph{Cost model.}
+All counts are exact nonnegative integers. Time and space are measured in bits
+on a deterministic machine with elementary operations on $O(\log n)$-bit
+indices and explicit big-integer arithmetic; sorting and merging are charged
+comparison by comparison. $\Ostar(f(n))$ means $O(n^{c}f(n))$ for some constant
+$c$. \Cref{sec:evidence} states the formal carrier bounds, whose polynomial
+prefactors are looser than those of \cref{prop:carrier}.

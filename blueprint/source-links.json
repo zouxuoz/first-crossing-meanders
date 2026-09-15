@@ -1,0 +1,174 @@
+{
+  "Meanders.Certified.first_crossing_open_n4": {
+    "line": 34,
+    "path": "Meanders/Certify/Examples/FirstCrossingOpen4.lean"
+  },
+  "Meanders.Certify.FirstCrossingRun.check_joint_correct": {
+    "line": 44,
+    "path": "Meanders/Certify/FirstCrossing/Correct.lean"
+  },
+  "Meanders.FirstCrossing.AcceptedWord.event_exterior": {
+    "line": 100,
+    "path": "Meanders/Models/FirstCrossing/Correctness/AcceptedWeight.lean"
+  },
+  "Meanders.FirstCrossing.Admissible.delta_le": {
+    "line": 50,
+    "path": "Meanders/Models/FirstCrossing/Original/Schedule.lean"
+  },
+  "Meanders.FirstCrossing.BallotHalf.down_budget": {
+    "line": 40,
+    "path": "Meanders/Models/FirstCrossing/Original/Cut.lean"
+  },
+  "Meanders.FirstCrossing.CoversProcessed.connected_of_one_cycle": {
+    "line": 118,
+    "path": "Meanders/Models/FirstCrossing/Surgery/Coverage.lean"
+  },
+  "Meanders.FirstCrossing.InSector": {
+    "line": 42,
+    "path": "Meanders/Models/FirstCrossing/Original/Source.lean"
+  },
+  "Meanders.FirstCrossing.Key": {
+    "line": 143,
+    "path": "Meanders/Models/FirstCrossing/Native/State.lean"
+  },
+  "Meanders.FirstCrossing.Packed.decode_wordSuccessors": {
+    "line": 111,
+    "path": "Meanders/Models/FirstCrossing/Packed/Correct.lean"
+  },
+  "Meanders.FirstCrossing.Sector": {
+    "line": 21,
+    "path": "Meanders/Models/FirstCrossing/Original/Source.lean"
+  },
+  "Meanders.FirstCrossing.Sector.lowerBonus": {
+    "line": 93,
+    "path": "Meanders/Models/FirstCrossing/Interpretation/Observer.lean"
+  },
+  "Meanders.FirstCrossing.Source.prefix_allowed": {
+    "line": 55,
+    "path": "Meanders/Models/FirstCrossing/Interpretation/SourceStep.lean"
+  },
+  "Meanders.FirstCrossing.acceptedSourceEquiv": {
+    "line": 197,
+    "path": "Meanders/Models/FirstCrossing/Correctness/ClosedBridge.lean"
+  },
+  "Meanders.FirstCrossing.adjacentCap_representsPaths": {
+    "line": 163,
+    "path": "Meanders/Models/FirstCrossing/Original/Pairing.lean"
+  },
+  "Meanders.FirstCrossing.adjacentCup_representsPaths": {
+    "line": 107,
+    "path": "Meanders/Models/FirstCrossing/Original/Pairing.lean"
+  },
+  "Meanders.FirstCrossing.asymmetricCutEquiv": {
+    "line": 195,
+    "path": "Meanders/Models/FirstCrossing/Original/Cut.lean"
+  },
+  "Meanders.FirstCrossing.carrierCard_le": {
+    "line": 130,
+    "path": "Meanders/Models/FirstCrossing/Native/Bounds.lean"
+  },
+  "Meanders.FirstCrossing.count_eq": {
+    "line": 7,
+    "path": "Meanders/Algorithms/FirstCrossing.lean"
+  },
+  "Meanders.FirstCrossing.count_open_even": {
+    "line": 144,
+    "path": "Meanders/Models/FirstCrossing/Native/Eval.lean"
+  },
+  "Meanders.FirstCrossing.count_open_odd": {
+    "line": 138,
+    "path": "Meanders/Models/FirstCrossing/Native/Eval.lean"
+  },
+  "Meanders.FirstCrossing.cyclicCheck_iff_noncrossing": {
+    "line": 476,
+    "path": "Meanders/Models/FirstCrossing/Native/Codec.lean"
+  },
+  "Meanders.FirstCrossing.emitted_next_between": {
+    "line": 37,
+    "path": "Meanders/Models/FirstCrossing/Native/Geometry.lean"
+  },
+  "Meanders.FirstCrossing.evaluateJoint_correct": {
+    "line": 20,
+    "path": "Meanders/Models/FirstCrossing/Correctness/JointCorrect.lean"
+  },
+  "Meanders.FirstCrossing.exteriorArchCutEquiv": {
+    "line": 361,
+    "path": "Meanders/Models/FirstCrossing/Original/Exterior.lean"
+  },
+  "Meanders.FirstCrossing.exteriorCount_cut": {
+    "line": 370,
+    "path": "Meanders/Models/FirstCrossing/Original/Exterior.lean"
+  },
+  "Meanders.FirstCrossing.exteriorCut_reflection": {
+    "line": 502,
+    "path": "Meanders/Models/FirstCrossing/Original/Exterior.lean"
+  },
+  "Meanders.FirstCrossing.firstHeightCounters": {
+    "line": 44,
+    "path": "Meanders/Models/FirstCrossing/Interpretation/FIFO.lean"
+  },
+  "Meanders.FirstCrossing.firstHeightPartition": {
+    "line": 155,
+    "path": "Meanders/Models/FirstCrossing/Original/Source.lean"
+  },
+  "Meanders.FirstCrossing.forcedFIFO_sound": {
+    "line": 330,
+    "path": "Meanders/Models/FirstCrossing/Interpretation/FIFO.lean"
+  },
+  "Meanders.FirstCrossing.forcedOpenings_card": {
+    "line": 349,
+    "path": "Meanders/Models/FirstCrossing/Original/ForcedPrefix.lean"
+  },
+  "Meanders.FirstCrossing.forcedPrefix_exact": {
+    "line": 321,
+    "path": "Meanders/Models/FirstCrossing/Original/ForcedPrefix.lean"
+  },
+  "Meanders.FirstCrossing.high_carrierCard_le": {
+    "line": 172,
+    "path": "Meanders/Models/FirstCrossing/Native/Bounds.lean"
+  },
+  "Meanders.FirstCrossing.high_geometry_port_bound": {
+    "line": 155,
+    "path": "Meanders/Models/FirstCrossing/Native/PortBound.lean"
+  },
+  "Meanders.FirstCrossing.inSector_high_admissible": {
+    "line": 13,
+    "path": "Meanders/Models/FirstCrossing/Original/Schedule.lean"
+  },
+  "Meanders.FirstCrossing.jointLayer_invariant": {
+    "line": 123,
+    "path": "Meanders/Models/FirstCrossing/Correctness/JointLayer.lean"
+  },
+  "Meanders.FirstCrossing.low_carrierCard_le": {
+    "line": 165,
+    "path": "Meanders/Models/FirstCrossing/Native/Bounds.lean"
+  },
+  "Meanders.FirstCrossing.low_geometry_port_bound": {
+    "line": 127,
+    "path": "Meanders/Models/FirstCrossing/Native/PortBound.lean"
+  },
+  "Meanders.FirstCrossing.lowerIncrement": {
+    "line": 173,
+    "path": "Meanders/Models/FirstCrossing/Native/Transition.lean"
+  },
+  "Meanders.FirstCrossing.saturatedComponent_permanent": {
+    "line": 60,
+    "path": "Meanders/Models/FirstCrossing/Surgery/Closure.lean"
+  },
+  "Meanders.FirstCrossing.stateFutureEquiv": {
+    "line": 165,
+    "path": "Meanders/Models/FirstCrossing/Correctness/Future.lean"
+  },
+  "Meanders.FirstCrossing.through_pair_ordinal": {
+    "line": 175,
+    "path": "Meanders/Models/FirstCrossing/Original/Cut.lean"
+  },
+  "Meanders.openMeanderNumber_even": {
+    "line": 84,
+    "path": "Meanders/Problems/Open.lean"
+  },
+  "Meanders.openMeanderNumber_odd": {
+    "line": 76,
+    "path": "Meanders/Problems/Open.lean"
+  }
+}

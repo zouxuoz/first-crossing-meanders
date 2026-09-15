@@ -1,0 +1,125 @@
+\section{Width bounds and the cost of the transfer}
+\label{sec:width}
+
+\begin{lemma}[LOW width]
+\label{lem:lowwidth}
+\lean{Meanders.FirstCrossing.low_geometry_port_bound, Meanders.FirstCrossing.high_geometry_port_bound}
+\leanok
+\uses{def:sectors, def:key}
+In \LOW\ the number of retained ports after any point is
+$h_P+h_Q=2k\le2(K-1)$.
+\end{lemma}
+
+\begin{proof}
+\leanok
+With the chronological schedule there is no right side and no emission; the
+ports are the unmatched openings, $h_P+h_Q=2k$ of them, and $k\le K-1$ is
+enforced after every point.
+\end{proof}
+
+\begin{lemma}[HIGH width]
+\label{lem:highwidth}
+\lean{Meanders.FirstCrossing.high_geometry_port_bound}
+\leanok
+\uses{lem:partition, lem:forced, def:key}
+In a \HIGH\ sector with $d=n-K$, the number of retained ports satisfies
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+stage of the schedule & retained ports \\
+\midrule
+after $t\le\Delta$ initial long-side points & $\le2t\le2d$ \\
+after a completed long/short pair & $\le2d$ \\
+between the two points of a pair & $\le2d+2$ \\
+with $t\le\Delta$ final long-side points unread & $\le2t\le2d$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+A single transition may temporarily hold $2d+4$ ports before its forced joins.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+\leanok
+Initial skirt: each processed point contributes at most two ports and nothing
+has been joined, so $p\le2t$, and $t\le\Delta\le d$ by \cref{lem:partition}.
+Completed pair: for one owner with cut height $w$, the identity
+$p=A_L+A_R-2c_{\min}-2\max(0,c_{\max}-I)$ of \cref{app:ports}, where
+$I=i_L-A_L=i_R-A_R$, $c_{\max}=\max(c_L,c_R)$ and $c_{\min}=\min(c_L,c_R)$,
+gives $p\le A_L+A_R=n-w$; summing over the two owners gives $2n-u-v=2d$. Final skirt: with $t$ long points unread and
+$r$ of the long budget remaining, $p=t-2\max(0,t-w-r)\le t$ per owner
+(\cref{app:ports}). The middle row adds the two ports of one point to the
+completed-pair bound.
+\end{proof}
+
+\begin{proposition}[Carrier size]
+\label{prop:carrier}
+\lean{Meanders.FirstCrossing.carrierCard_le, Meanders.FirstCrossing.low_carrierCard_le, Meanders.FirstCrossing.high_carrierCard_le}
+\leanok
+\uses{lem:lowwidth, lem:highwidth, lem:seams}
+The number of distinct keys in any layer is at most
+\[
+ \sum_{k=0}^{K-1}(2k+1)\Cat_k=O\bigl(n\,4^{K-1}\bigr)\ \text{in \LOW},\qquad
+ (2n+1)^{4}\sum_{j=0}^{d+1}\Cat_j=O\bigl(n^{4}4^{\,d}\bigr)\ \text{in a \HIGH\ sector}.
+\]
+\end{proposition}
+
+\begin{proof}
+\leanok
+In \LOW\ the key is determined by the split of $2k$ ports between $P$ and $Q$
+($2k+1$ possibilities) and a noncrossing pairing of $2k$ positions. In \HIGH\
+the four counters take at most $(2n+1)^{4}$ values, and the pairing is a
+noncrossing pairing of at most $2d+2$ positions.
+\end{proof}
+
+The Lean statements corresponding to this proposition are
+$(n+1)^{4}\,K\,4^{K-1}$ for \LOW\ and $(n+1)^{4}\sum_{j=0}^{d+1}\Cat_j$ for a
+\HIGH\ sector, both for the set of keys that pass the validity test of a
+stage; they carry the same exponential factors with looser polynomial
+prefactors than the display above, and the paper's sharper \LOW\ form is not
+formalized (\cref{sec:evidence}).
+
+\begin{theorem}[Cost for a fixed threshold]
+\label{thm:cost}
+\uses{lem:partition, lem:future, lem:cycle, prop:carrier, lem:lowwidth, lem:highwidth}
+For $1\le K\le n$ the transfer computes $\Closed(n)$ in
+$\operatorname{poly}(n)\bigl(4^{K-1}+4^{n-K}\bigr)$ bit time and bit space.
+\end{theorem}
+
+\begin{proof}
+There are $O(n^{2})$ sectors, each with $O(n)$ stages, processed sequentially
+with two logical live layers plus the working storage of one sort. By \cref{prop:carrier} a layer has $O(n^{4}4^{n-K})$
+keys in \HIGH\ and $O(n4^{K-1})$ in \LOW, each of $O(n\log n)$ bits. Each
+key emits at most four successors; one trial performs a constant number of
+adjacent surgeries, at most two forced joins, and a canonical renaming, all in
+polynomial time on arrays of length $O(n)$. If a layer emits $M$ records,
+deterministic comparison sorting of the records by key costs $O(M\log M)$
+comparisons of $O(n\log n)$-bit keys, and $\log M=O(n)$ because $M$ is at
+most four times the key bound; merging equal keys is then one linear pass.
+The weight $C$ of a key after $t$ points counts surviving labelled
+histories of length $t$, so $C\le4^{t}\le4^{2n}$ has $O(n)$ bits; the
+observer weight of \cref{sec:open} satisfies $0\le E\le nC$, since a history
+has at most $n$ lower $D$ letters, so it also has $O(n)$ bits, and merging
+adds such integers. Sorting the $M$ emitted records needs $O(M)$ records of
+workspace, within the same bound. Summing over stages and sectors gives the
+bound, with the two exponentials arising from the two branches.
+\end{proof}
+
+\begin{corollary}[Balance]
+\label{cor:balance}
+\uses{thm:cost}
+With $K=\lfloor n/2\rfloor+1$ the transfer computes $\Closed(n)$ in
+$\Ostar(2^{n})$ bit time and space.
+\end{corollary}
+
+\begin{proof}
+For $n=2m$ we have $K=m+1$, $d=m-1$, so $4^{K-1}=2^{n}$ and $4^{d}=2^{n-2}$.
+For $n=2m+1$ we have $K=m+1$, $d=m$, so $4^{K-1}=4^{d}=2^{n-1}$.
+\end{proof}
+
+\begin{remark}
+The count of keys per layer is an upper bound on what is stored; the
+transfer generates only keys reachable from the empty seed, so its actual
+memory is often much smaller. No enumeration of complete half words, no
+precomputed table and no completion oracle is used: the Catalan bounds are
+never traversed as lists.
+\end{remark}

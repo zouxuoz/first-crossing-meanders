@@ -1,0 +1,12 @@
+{
+  "kind": "run",
+  "version": 1,
+  "profile": "compact",
+  "problem": "closed",
+  "algorithm": "first_crossing",
+  "n": 3,
+  "count": 8,
+  "representation": "count",
+  "layers": [],
+  "root": "08e4cc9a1122ee323557a03dd96ffa02484eac4ff08da4fd9716bbe454af84d6"
+}

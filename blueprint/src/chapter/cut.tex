@@ -1,0 +1,135 @@
+\section{Cutting a matching: budgets and forced arches}
+\label{sec:cut}
+
+\subsection{The asymmetric cut bijection}
+
+Fix one matching $P\in\NC_n$, a cut position $0\le L\le2n$ and $w=h_P(L)$; put
+$R=2n-L$. The \emph{left inward word} of $P$ is the prefix of $w_P$ of length
+$L$. The \emph{right inward word} is the suffix of length $R$ read from the right
+end towards the cut with $U$ and $D$ exchanged. Both are \emph{ballot words}
+(nonnegative prefix heights) ending at height $w$, and their numbers of $D$
+letters, the \emph{down budgets}, are
+\begin{equation}
+\label{eq:budgets}
+ A_L=\frac{L-w}{2},\qquad A_R=\frac{R-w}{2}.
+\end{equation}
+In particular $0\le w\le\min(L,R)$ and $w\equiv L\equiv R\pmod2$.
+
+\begin{lemma}[Asymmetric cut bijection]
+\label{lem:cut}
+\lean{Meanders.FirstCrossing.asymmetricCutEquiv, Meanders.FirstCrossing.BallotHalf.down_budget, Meanders.FirstCrossing.through_pair_ordinal}
+\leanok
+\uses{lem:partition}
+For every $L$ and $w$, the matchings $P\in\NC_n$ with $h_P(L)=w$ are in
+bijection with pairs of ballot words of lengths $L$ and $R$, both ending at
+height $w$. Under this bijection the internal arches of each half are the stack
+matches of its word, and the $w$ \emph{through arches} join the $i$-th oldest
+unmatched left opening to the $i$-th oldest unmatched right opening
+(oldest meaning nearest the outer end, i.e.\ farthest from the cut) for
+$i=1,\dots,w$.
+\end{lemma}
+
+\begin{proof}
+\leanok
+Cutting $P$ gives two such words. Conversely, given two words, match each $D$ to
+the top of its stack within its own half; the unmatched left openings
+$a_1<\dots<a_w$ and unmatched right openings $b_1>\dots>b_w$ (in physical
+coordinates, so that $a_1$ and $b_1$ are the oldest) must be joined by through
+arches. An internal arch cannot enclose an unmatched opening of its own half,
+since closing it would have removed that opening from the stack first, so
+internal arches never cross through arches. Through arches are pairwise nested
+exactly when $a_i$ is joined to $b_i$: any other assignment has $i<j$ with
+$a_i<a_j<b_{\sigma(i)}<b_{\sigma(j)}$, a crossing. Hence there is exactly one
+noncrossing completion, and the two maps are mutually inverse.
+\end{proof}
+
+Both halves are read \emph{inward}, from the outer ends of the line towards the
+cut. The reflection of the right half exchanges opening and closing roles but
+does not change the matching or its owner. Nothing in the lemma relates $L$ to
+$R$: the two halves may have very different lengths and budgets.
+
+\subsection{The forced-prefix lemma}
+
+Consider one inward ballot word of length $m$ with down budget $A$ and final
+height $w=m-2A$. After a feasible prefix of length $i$ containing $c$ letters
+$D$, the height is $h=i-2c$, the remaining length is $\ell=m-i$ and the
+remaining down budget is $r=A-c$, with $0\le r\le\ell$. Number the currently
+unmatched openings from oldest to newest.
+
+\begin{lemma}[Exact forced prefix]
+\label{lem:forced}
+\lean{Meanders.FirstCrossing.forcedPrefix_exact, Meanders.FirstCrossing.forcedOpenings_card}
+\leanok
+\uses{lem:cut}
+The set of currently unmatched openings that remain unmatched under
+\emph{every} continuation of length $\ell$ with exactly $r$ letters $D$ and
+nonnegative heights is precisely the oldest
+\[
+ f=\max(0,\,h-r)=\max(0,\,i-A-c)
+\]
+openings. Moreover $i-A-c$ increases by one at a $U$ letter and is unchanged
+at a $D$ letter, so $f$ is nondecreasing along the word.
+\end{lemma}
+
+\begin{proof}
+\leanok
+A continuation contains $r$ letters $D$, so the height never drops below
+$h-r$ and the oldest $\max(0,h-r)$ openings survive every continuation. For the
+converse exhibit continuations that close every newer opening. If $h>r$ take
+$D^{r}U^{\ell-r}$; if $h\le r$ take $D^{h}(UD)^{r-h}U^{\ell-2r+h}$. Both have
+length $\ell$, use exactly $r$ letters $D$, stay nonnegative, end at height
+$h+\ell-2r=w\ge0$, and close all but the oldest $f$ openings. Under a $U$ the
+quantity $i-A-c$ grows by one; under a $D$ both $i$ and $c$ grow, so it is
+unchanged, and $f=\max(0,i-A-c)$ cannot decrease.
+\end{proof}
+
+We call the oldest $f$ openings \emph{emitted}. Emitted openings can only be
+closed by a through arch; the remaining $\rho=h-f=\min(h,A-c)$ newest openings
+form a \emph{reservoir} that the word's own $D$ letters consume in stack order (\cref{fig:forced}).
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=1cm,y=0.5cm,>=Stealth,every node/.style={font=\small}]
+ \foreach \k/\lab in {0/1,1/2,2/3,3/4,4/5} {
+   \draw (0,\k) rectangle (1.2,\k+0.9);
+   \node at (0.6,\k+0.45) {$\lab$};
+ }
+ \node[anchor=east] at (-0.2,0.45) {oldest};
+ \node[anchor=east] at (-0.2,4.45) {newest};
+ \draw[decorate,decoration={brace,amplitude=4pt}] (1.4,4.9) -- (1.4,3.0)
+   node[midway,anchor=west,xshift=6pt] {reservoir: newest $r=2$, may still close inside the half};
+ \draw[decorate,decoration={brace,amplitude=4pt}] (1.4,2.9) -- (1.4,0)
+   node[midway,anchor=west,xshift=6pt] {emitted: oldest $f=h-r=3$, forced through the cut};
+ \node[anchor=north] at (0.6,-0.3) {$h=5$ open, $r=A-c=2$ downs left};
+\end{tikzpicture}
+\caption{\Cref{lem:forced} on one inward half: with $h=5$ current openings
+and $r=2$ remaining down steps, at most the two newest openings can still be
+closed inside the half, so the three oldest are emitted. Emitted openings
+await their through partner in a FIFO; the reservoir is consumed in stack
+order.}
+\label{fig:forced}
+\end{figure}
+
+\begin{corollary}[Forced FIFO joins]
+\label{cor:fifo}
+\lean{Meanders.FirstCrossing.forcedFIFO_sound, Meanders.FirstCrossing.emitted_next_between}
+\leanok
+\uses{lem:cut, lem:forced}
+Let both inward words of one matching be read in any interleaved order. As soon
+as the $i$-th oldest opening has been emitted on both sides, the through arch
+joining these two openings is present in every matching compatible with the
+two prefixes and the budgets \eqref{eq:budgets}. Hence the join may be
+performed immediately, and the two openings may be forgotten; the ordinal $i$ is
+never affected by later letters.
+\end{corollary}
+
+\begin{proof}
+\leanok
+By \cref{lem:forced} an emitted opening is unmatched in every completion of its
+half, and by \cref{lem:cut} the unmatched openings are joined by common oldest-first
+ordinal. Newer openings cannot change the ordinal of an older one.
+\end{proof}
+
+Emission is cumulative: $f$ counts emitted openings including those already
+joined and forgotten. At the end of a half, $c=A$, the reservoir is empty and
+$f=w$, so all $w$ through arches have been joined once both halves are finished.

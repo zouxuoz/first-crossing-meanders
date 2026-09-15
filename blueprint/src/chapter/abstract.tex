@@ -1,0 +1,31 @@
+\maketitle
+
+\begin{abstract}
+A closed meander of order $n$ is a pair of noncrossing perfect matchings on $2n$
+ordered points whose union is a single cycle. We give an exact algorithm for the
+closed meandric number $M_n$ that uses $\Ostar(2^{n})$ bit time and bit space,
+where $\Ostar$ suppresses factors polynomial in $n$. The algorithm partitions
+ordered matching pairs according to the first cut at which their combined Dyck
+height reaches a threshold $K$. Pairs that never reach $K$ are counted by a
+bounded-height planar connectivity transfer costing $\Ostar(4^{K-1})$. Every
+other pair is assigned to one sector determined by its first-hit data; there the
+cut height fixes exact down budgets for both halves of each matching, so
+guaranteed through arches can be joined while an asymmetric inward scan is still
+running. A four-seam noncrossing representation keeps the retained boundary
+within $2(n-K)+O(1)$ endpoints throughout, giving $\Ostar(4^{n-K})$ for all
+sectors together. Balancing the two branches at $K=\lfloor n/2\rfloor+1$ gives
+$\Ostar(2^{n})$. A first-moment channel driven by an exterior-arch cut identity
+computes the even open meandric number $\Open(2n)$ on the same state support,
+and $\Open(2n-1)=M_n$ follows from the standard compactification identity, so one
+run returns $M_n$, $\Open(2n-1)$ and $\Open(2n)$. The correctness of the
+reference evaluator, the \LOW/\HIGH\ width bounds and a carrier-cardinality
+bound with the exponential factors $4^{K-1}$ and $4^{n-K}$ are formally
+verified in Lean~4; the polynomial-factor bit-time and bit-space accounting
+is proved on paper. The optimized Rust producer, whose direct word surgery is
+validated differentially rather than verified, reproduces the published
+values through order $28$ and, as production output without independent
+check, returns closed values through order $30$ and open values through $60$
+crossings; small-order certificates are accepted by a checker whose soundness
+is proved in Lean. To our knowledge, an $\Ostar(2^{n})$ bound for unrestricted exact
+closed meander counting has not previously been established.
+\end{abstract}

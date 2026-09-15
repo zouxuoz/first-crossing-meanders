@@ -1,0 +1,39 @@
+name = "Meanders"
+defaultTargets = ["Meanders", "MeandersTests", "verify", "exportTheorem"]
+testDriver = "MeandersTests"
+lintDriver = "batteries/runLinter"
+lintDriverArgs = ["--no-build", "Meanders"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+warningAsError = true
+weak.linter.mathlibStandardSet = true
+# Mathlib requires per-file copyright blocks; this project uses its root LICENSE.
+weak.linter.style.header = false
+
+[[require]]
+name = "checkdecls"
+git = "https://github.com/PatrickMassot/checkdecls.git"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "58336cf0e8950628f6f877758d09ccb8070ec07b"
+
+[[lean_lib]]
+name = "Meanders"
+
+# Build-time regression checks; `lake test`. Kept out of `Meanders` so that
+# building the library never runs a brute-force count.
+[[lean_lib]]
+name = "MeandersTests"
+
+[[lean_exe]]
+name = "verify"
+root = "Verify"
+
+[[lean_exe]]
+name = "exportTheorem"
+root = "ExportTheorem"

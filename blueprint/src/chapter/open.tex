@@ -1,0 +1,109 @@
+\section{The shared open observer}
+\label{sec:open}
+
+By \eqref{eq:odd} the same run gives $\Open(2n-1)=\Closed(n)$. For $\Open(2n)$
+we need, by \eqref{eq:even}, the sum of $e(Q)$ over the connected pairs. The
+following identity localizes exterior arches to events visible in the inward
+words.
+
+\begin{lemma}[Exterior cut identity]
+\label{lem:exterior}
+\lean{Meanders.FirstCrossing.exteriorArchCutEquiv, Meanders.FirstCrossing.exteriorCount_cut, Meanders.FirstCrossing.exteriorCut_reflection}
+\leanok
+\uses{lem:cut}
+Let $Q\in\NC_n$, let $0\le L\le2n$ and $w=h_Q(L)$. Let $r_L$ and $r_R$ be the
+numbers of $D$ letters in the left and right inward words of $Q$ whose
+\emph{original} pre-step height is $1$ (equivalently, whose post-step height is
+$0$). Then
+\[
+ e(Q)=r_L+r_R+\ind{w>0}.
+\]
+Moreover the exterior arches are in bijection with these $r_L+r_R$ letters
+together with, when $w>0$, one distinguished through arch.
+\end{lemma}
+
+\begin{proof}
+\leanok
+Every arch of $Q$ lies entirely in the left half, entirely in the right half,
+or crosses the cut. An arch inside the left half is exterior if and only if no
+arch encloses it. In the stack reading of the left word the arch closes at a
+$D$ letter; it is enclosed by some arch exactly when another opening is still
+on the stack at that moment, that is, when the pre-step height exceeds $1$
+(an older opening on the stack either closes later, enclosing the arch, or is a
+through opening, which also encloses it). The right half is symmetric, since
+reflection preserves nesting. Through arches are pairwise nested
+(\cref{lem:cut}); if $w>0$ the outermost one, joining the two oldest unmatched
+openings, is enclosed by nothing, and every other through arch is enclosed by
+it, while an internal arch cannot enclose an arch that crosses the cut. The
+three classes are disjoint and exhaustive.
+\end{proof}
+
+\begin{definition}[Observer]
+\label{def:observer}
+\lean{Meanders.FirstCrossing.lowerIncrement, Meanders.FirstCrossing.Sector.lowerBonus}
+\leanok
+\uses{lem:partition, lem:exterior}
+Each key carries a pair of integers $(C,E)$, seeded at $(1,0)$. When a point on
+side $s$ is processed with a $D$ letter for $Q$ and original pre-step height
+$h_{Q,s}=i_s-2c_{Qs}=1$, set $a=1$; otherwise $a=0$. The transition sends
+$(C,E)$ to $(C,\,E+aC)$, merging equal keys by componentwise addition. At
+acceptance a \HIGH\ sector emits $(C,\,E+bC)$ with $b=\ind{v>0}$ (which is
+$1$ in every nonempty sector by \cref{lem:partition}); \LOW\ emits $(C,E)$.
+\end{definition}
+
+\begin{theorem}[Joint correctness]
+\label{thm:joint}
+\lean{Meanders.FirstCrossing.jointLayer_invariant, Meanders.FirstCrossing.AcceptedWord.event_exterior, Meanders.FirstCrossing.evaluateJoint_correct, Meanders.FirstCrossing.count_eq}
+\leanok
+\uses{lem:partition, lem:filter, lem:future, lem:cycle, lem:exterior, def:observer}
+For $n\ge1$ and $1\le K\le n$, the sum over \LOW\ and all admissible \HIGH\
+sectors of the emitted first components is $\Closed(n)$, and the sum of the
+emitted second components is $\Open(2n)$.
+\end{theorem}
+
+\begin{proof}
+\leanok
+Fix a sector and a stage $t$. For a key $\kappa$ let $H_t(\kappa)$ be the set of
+surviving partial source words with key $\kappa$, and for such a word $x$ let
+$r(x)$ be the number of $Q$-letters $D$ read so far from original height $1$.
+We claim that the stored pair equals
+$\bigl(|H_t(\kappa)|,\ \sum_{x\in H_t(\kappa)}r(x)\bigr)$. This holds for the
+seed. The increment $a$ of the next letter is a function of the key, the stage
+and the label, because $h_{Q,s}=i_s-2c_{Qs}$ is read from the counters
+(\cref{lem:filter}); extending each $x$ by a label with increment $a$ changes
+$r$ to $r+a$, and the multiset of successors is the same for every $x$ in
+$H_t(\kappa)$ by \cref{lem:future}. Summing gives $(C,E+aC)$ for each label,
+and merging equal targets adds the sums. Rejected words contribute to neither
+channel. At the last stage, an accepted word $x$ is a connected pair
+(\cref{lem:cycle}) and $r(x)=r_L+r_R$, so $r(x)+b=e(Q)$ by
+\cref{lem:exterior} with the sector's cut $L$ and $w=v$ (in \LOW\ the cut is
+$L=2n$, $w=0$). Summing over the partition of \cref{lem:partition} and applying
+\eqref{eq:even} completes the proof.
+\end{proof}
+
+\begin{corollary}
+\label{cor:open}
+\lean{Meanders.FirstCrossing.count_open_even, Meanders.FirstCrossing.count_open_odd}
+\uses{thm:joint, thm:cost, cor:balance}
+One run at order $n$ returns $\bigl(\Closed(n),\Open(2n-1),\Open(2n)\bigr)$
+within the bounds of \cref{thm:cost,cor:balance}; the observer adds two
+$O(n)$-bit additions per transition and no key field, since $0\le E\le nC$
+(a surviving history contains at most $n$ lower $D$ letters, each
+contributing at most $C$) and the terminal bonus adds at most $C$. Hence $\Open(m)$ is
+computable in $\Ostar(2^{\lceil m/2\rceil})$ for every $m\ge1$, and
+$\Open(0)=1$.
+\end{corollary}
+
+\begin{remark}[Two shortcuts that fail]
+\label{rem:shortcuts}
+(a) The event must use the \emph{original} height, not the number of retained
+ports of the group. At $n=3$ in sector $(L,u,v)=(2,2,2)$ there is a state
+before the last right point whose lower-right original height is $3$ while its
+retained group has one port; a lower $D$ there contributes nothing, and a test
+on retained length would wrongly add one.
+(b) The lower channel cannot be replaced by half of a symmetric upper-plus-lower
+channel sector by sector: at $n=8$ the sectors $(6,4,6)$ and $(6,6,4)$ both
+contain $506$ connected pairs but have lower exterior totals $701$ and
+$1021$. Exchanging $P$ and $Q$ maps a sector to a different sector, so the
+symmetric total is $2\Open(2n)$ only after summing all sectors.
+\end{remark}

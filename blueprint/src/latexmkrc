@@ -1,0 +1,6 @@
+$pdf_mode = 1;
+# `-interaction=nonstopmode -halt-on-error`: without them xelatex stops at an
+# error waiting for input on stdin, which in CI means a confusing hang or a
+# truncated log instead of the error itself.
+$pdflatex = 'xelatex -synctex=1 -interaction=nonstopmode -halt-on-error -output-directory=../print/';
+@default_files = ('print.tex');

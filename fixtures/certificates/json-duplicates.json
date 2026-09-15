@@ -1,0 +1,30 @@
+[
+  {
+    "name": "duplicate-kind",
+    "text": "{\"kind\": \"run\", \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-problem",
+    "text": "{\"problem\": \"closed\", \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-n",
+    "text": "{\"n\": 1, \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-count",
+    "text": "{\"count\": 0, \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-version",
+    "text": "{\"version\": 2, \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-profile",
+    "text": "{\"profile\": \"full\", \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  },
+  {
+    "name": "duplicate-root",
+    "text": "{\"root\": \"ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\", \"kind\": \"run\", \"version\": 1, \"profile\": \"compact\", \"problem\": \"open\", \"algorithm\": \"brute_force\", \"n\": 0, \"count\": 1, \"representation\": \"count\", \"layers\": [], \"root\": \"249bb35551cbfa17c09a970ad15228e2bafc8e2629003eeed31fe5b210c371a5\"}"
+  }
+]

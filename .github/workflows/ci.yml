@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    name: Rust fmt / clippy / test
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: rust # rustup picks up ../rust-toolchain.toml
+    steps:
+      - uses: actions/checkout@v5
+      - uses: Swatinem/rust-cache@63fed3e2fecf6f7b51dc6f043341b79ef82a9ae7 # v2.9.2
+        with:
+          workspaces: rust
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+
+  lean:
+    name: Lean build + certificate pipeline
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - uses: actions/checkout@v5
+      - uses: Swatinem/rust-cache@63fed3e2fecf6f7b51dc6f043341b79ef82a9ae7 # v2.9.2
+        with:
+          workspaces: rust
+      - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1.6.0
+        with:
+          axiom-audit: true # fail on sorry / native_decide / custom axioms
+          lint: true # Mathlib style and Batteries declaration linters
+      # Lean rejects source warnings; Lake also fails on any warning emitted by the build.
+      - name: Build-time checks, warnings-as-errors, and axiom snapshot
+        run: lake --wfail test
+      - name: Repository policy
+        run: ./scripts/policy.sh
+      - name: Rust -> certificate -> Lean pipeline
+        run: ./scripts/pipeline.sh
+      - name: Concrete theorem export and kernel replay
+        run: ./scripts/replay.sh
+
+  blueprint:
+    name: Blueprint builds and matches the Lean
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # source_links.py --check diffs against the pinned commit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r blueprint/requirements.txt
+      # xelatex, latexmk, and the packages print.tex loads: geometry, enumitem,
+      # mathtools, cleveref, thmtools, etexcmds. `texlive-latex-extra` pulls in
+      # `-recommended` and `-base`, which cover the rest.
+      - name: Install TeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            latexmk texlive-xetex texlive-latex-extra texlive-fonts-recommended \
+            texlive-pictures poppler-utils graphviz libgraphviz-dev
+      - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1.6.0
+        with:
+          test: false
+          lint: false
+      # PDF runs BibTeX and leanblueprint copies print.bbl to src/web.bbl.
+      # A clean web build must follow it to resolve literature citations.
+      - name: Build the print blueprint and bibliography
+        run: |
+          leanblueprint pdf
+          if grep -E 'Citation .* undefined|There were undefined references' blueprint/print/print.log; then
+            exit 1
+          fi
+      # `web` produces lean_decls, so declaration checking follows it.
+      - name: Build the web blueprint
+        run: |
+          set -o pipefail
+          test -s blueprint/src/web.bbl
+          leanblueprint web 2>&1 | tee /tmp/meanders-blueprint-web.log
+          if grep -E 'Bibliography item .* has no entry|ERROR:|unrecognized command/environment' /tmp/meanders-blueprint-web.log; then
+            exit 1
+          fi
+      - name: Every \lean{} names a real declaration
+        run: lake exe checkdecls blueprint/lean_decls
+      - name: Rendered images, dependency graph, source links and standard axioms
+        run: |
+          python3 scripts/source_links.py --check
+          python3 scripts/check_blueprint.py

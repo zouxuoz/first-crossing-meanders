@@ -1,0 +1,19 @@
+{
+  "kind": "run",
+  "version": 1,
+  "profile": "compact",
+  "problem": "open",
+  "algorithm": "first_crossing_optimized",
+  "n": 2,
+  "count": 1,
+  "representation": "first-crossing-lower-jet",
+  "layers": [],
+  "root": "ec45cdf44b2cb8fb99e8b4d6c2ab47d8eba107f6166c0025069ad1c326d2a095",
+  "firstCrossing": {
+    "nativeOrder": 1,
+    "threshold": 1,
+    "closed": 1,
+    "openEven": 1,
+    "sectors": []
+  }
+}

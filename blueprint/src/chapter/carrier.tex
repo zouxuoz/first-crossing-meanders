@@ -1,0 +1,286 @@
+\section{The four-seam carrier and the transfer}
+\label{sec:carrier}
+
+\subsection{Incidence graph and the schedule}
+
+It is convenient to split each physical point $x$ into two \emph{incidences}
+$x^{P}$ and $x^{Q}$ joined by a \emph{vertex edge}; an arch of $P$ joins the
+$P$-incidences of its endpoints, and likewise for $Q$. The resulting graph is a
+subdivision-like replacement of the overlay: it is $2$-regular and connected
+exactly when the overlay is.
+
+Fix a \HIGH\ sector $(L,u,v)$, and write $R=2n-L$, $\Delta=|L-n|$,
+$d=n-K$. The \emph{long} side is the longer of the two halves, of length
+$n+\Delta$, and the \emph{short} side has length $n-\Delta$ (at $\Delta=0$ take
+the left side as long). The \emph{schedule} processes physical points inward:
+first $\Delta$ points of the long side, then $n-\Delta$ pairs consisting of one
+long-side and one short-side point, then the remaining $\Delta$ long-side
+points. Each side is thus read in its own inward order, and every point is
+visited exactly once. The \LOW\ branch uses the chronological schedule
+($L=2n$, $R=0$).
+
+Both matchings are cut at $L$; their halves have budgets
+\eqref{eq:budgets} with $w=u$ for $P$ and $w=v$ for $Q$.
+A \emph{source word} of the sector consists of two inward ballot words for $P$
+and two for $Q$ with these lengths and budgets \emph{and} whose two left words
+satisfy the first-hit condition of \cref{def:sectors}: the original grade
+$j-c_P(j)-c_Q(j)$ is $<K$ after $j<L$ left points and $=K$ after $L$. Lengths
+and budgets alone do not imply this; a pair may have the prescribed heights at
+$L$ but reach $K$ earlier, and then it belongs to another sector. A source
+word of \LOW\ consists of two complete ballot words of length $2n$ ending at
+height $0$ whose grade is $<K$ after every prefix. We call these the
+\emph{sector-valid} source words; by \cref{lem:cut} they are in bijection with
+the pairs $(P,Q)$ of the sector. Reading one point of the
+schedule reveals one letter of $P$ and one of $Q$ on that side; the letter pair
+is one of the four \emph{labels} $UU,UD,DU,DD$.
+
+\subsection{The state}
+
+At any stage of the schedule the processed graph consists of the vertex edges
+of processed points, the internal arches determined by the stack matches so
+far, and the through arches already joined by \cref{cor:fifo}. Its nodes have
+degree $2$ (saturated) or $1$ (a \emph{port}). Live components are paths whose
+two ports are their endpoints, plus possibly closed cycles.
+
+The ports are exactly the unmatched, not yet joined openings of the four
+half words. Group them by owner and side into $PL$, $PR$, $QL$, $QR$, each
+ordered oldest first. For a group $g$ on side $s$ with $i_s$ processed points,
+$c_g$ letters $D$ read, budget $A_g$ and opposite group $g'$ (same owner, other
+side), \cref{lem:forced} gives
+\begin{equation}
+\label{eq:counters}
+ h_g=i_s-2c_g,\quad f_g=\max(0,\,i_s-A_g-c_g),\quad
+ \rho_g=\min(h_g,A_g-c_g),\quad q_g=\max(f_g-f_{g'},0),
+\end{equation}
+where $h_g$ is the original height, $f_g$ the cumulative emission (written $f$ rather than $E$, which is reserved for the observer channel of \cref{sec:open}), and the
+retained group is a \emph{FIFO} of $q_g$ emitted-but-unjoined openings (oldest
+first) followed by a \emph{reservoir} of $\rho_g$ openings. The number of
+retained ports of one owner is
+\begin{equation}
+\label{eq:ports}
+ p=h_{L}+h_{R}-2\min(f_L,f_R).
+\end{equation}
+
+\begingroup
+% Slightly more interword shrink keeps the counter tuple on one line.
+\spaceskip=3.33333pt plus 1.66667pt minus 1.33333pt
+\begin{definition}[Carrier key]
+\label{def:key}
+\lean{Meanders.FirstCrossing.Key}
+\leanok
+\uses{cor:fifo, lem:forced}
+The \emph{key} of a stage is the tuple of four down counters
+$(c_{PL},c_{PR},c_{QL},c_{QR})$ together with the pairing of the retained
+ports into path endpoints, recorded as a fixed-point-free involution on the
+positions of the cyclic sequence
+\[
+ \rev(PL),\ PR,\ \rev(QR),\ QL .
+\]
+The sector metadata and the stage index are shared by a whole layer and are
+not part of the key.
+\end{definition}
+\endgroup
+
+Given the stage, the four counters determine every group length and every
+FIFO/reservoir separator by \eqref{eq:counters}. No component names, ages,
+path lengths or history are stored.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth,every node/.style={font=\small}]
+ % line
+ \draw[thick] (0,0) -- (12,0);
+ % processed blocks
+ \fill[gray!15] (0,-2.6) rectangle (3.6,2.6);
+ \fill[gray!15] (8.4,-2.6) rectangle (12,2.6);
+ \node at (1.8,2.9) {processed left prefix ($i_L\le L$ points)};
+ \node at (10.2,2.9) {processed right prefix ($i_R\le R$ points)};
+ \node at (6,-2.45) {unprocessed};
+ \draw[dashed] (3.6,-2.6) -- (3.6,2.6);
+ \draw[dashed] (8.4,-2.6) -- (8.4,2.6);
+ % PL arcs (upper, left): pending, crossing the left cut
+ \draw (0.6,0) arc (180:90:2.4 and 2.2) -- (3.9,2.2);
+ \draw (1.4,0) arc (180:90:1.6 and 1.5) -- (3.9,1.5);
+ \draw (2.2,0) arc (180:90:0.8 and 0.8) -- (3.9,0.8);
+ % internal PL arch
+ \draw (2.6,0) arc (180:0:0.35 and 0.35);
+ % QL arcs (lower, left)
+ \draw (1.0,0) arc (180:270:2.0 and 1.8) -- (3.9,-1.8);
+ \draw (1.8,0) arc (180:270:1.2 and 1.0) -- (3.9,-1.0);
+ % PR arcs (upper, right)
+ \draw (11.4,0) arc (0:90:2.4 and 2.0) -- (8.1,2.0);
+ \draw (10.6,0) arc (0:90:1.6 and 1.2) -- (8.1,1.2);
+ % QR arcs (lower, right)
+ \draw (11.0,0) arc (0:-90:2.0 and 1.9) -- (8.1,-1.9);
+ \draw (10.2,0) arc (0:-90:1.2 and 1.2) -- (8.1,-1.2);
+ \draw (9.4,0) arc (0:-90:0.5 and 0.5) -- (8.1,-0.5);
+ % group labels
+ \node[anchor=east,fill=white,inner sep=1pt] at (3.5,1.5) {$PL$};
+ \node[anchor=east,fill=white,inner sep=1pt] at (3.5,-1.4) {$QL$};
+ \node[anchor=west,fill=white,inner sep=1pt] at (8.5,1.6) {$PR$};
+ \node[anchor=west,fill=white,inner sep=1pt] at (8.5,-1.2) {$QR$};
+ % seams
+ \node[draw,fill=white,rounded corners=1pt,inner sep=1.5pt] at (3.6,0) {left vertex seam};
+ \node[draw,fill=white,rounded corners=1pt,inner sep=1.5pt] at (8.4,0) {right vertex seam};
+ \node[draw,fill=white,rounded corners=1pt,inner sep=1.5pt] at (6,2.2) {$P$ through seam};
+ \node[draw,fill=white,rounded corners=1pt,inner sep=1.5pt] at (6,-2.0) {$Q$ through seam};
+ % orientation of cyclic order
+ \draw[->,gray] (4.3,1.9) -- (4.3,0.4);
+ \node[gray,anchor=west] at (4.35,1.15) {\scriptsize newest};
+\end{tikzpicture}
+\caption{The four-seam carrier at an intermediate stage; the shaded blocks
+are the processed prefixes of the two halves, not the complete halves, and
+the arches are schematic. Pending arches cross the two cuts; walking
+around the unprocessed middle region meets the ports in the cyclic order
+$\rev(PL),PR,\rev(QR),QL$. The newest openings of each group are nearest the
+corresponding cut; the oldest are farthest from it. The two vertex seams sit on the line at
+the cuts; the two through seams sit between the oldest ports of the two halves
+of each owner.}
+\label{fig:carrier}
+\end{figure}
+
+\subsection{Transitions}
+
+Processing a point on side $s$ with label $(\alpha,\beta)$, $\alpha$ for $P$
+and $\beta$ for $Q$, consists of the following steps. Every operation is
+performed on the current key and produces a successor key or a rejection.
+\begin{enumerate}[nosep,label=(\arabic*)]
+\item \emph{Feasibility.} A $D$ letter needs a nonempty reservoir of its group
+  and remaining budget $A_g-c_g\ge1$; a $U$ letter needs enough remaining
+  length to spend the remaining budget. The grade after this point,
+  computed from the original counters (\cref{lem:filter}), must satisfy the
+  sector's first-hit condition: in \LOW\ it must be $<K$ after every point;
+  on the left side of \HIGH\ it must be $<K$ after the $j$-th left point for
+  $j<L$ and $=K$ for $j=L$. Right-side points impose no grade test.
+\item \emph{Vertex surgery at the vertex seam of side $s$.} The new point
+  contributes two adjacent ports $x^{P},x^{Q}$ joined by a vertex edge. Label
+  $UU$ inserts this \emph{cup} at the seam. Label $UD$ (resp.\ $DU$) attaches
+  the $Q$ (resp.\ $P$) incidence to the newest port of its reservoir, a
+  \emph{replacement} of that port by $x^{P}$ (resp.\ $x^{Q}$) at the seam.
+  Label $DD$ attaches both incidences to the two newest reservoir ports of $P$
+  and $Q$, which are adjacent across the seam: a \emph{cap}. A cap either
+  splices two paths into one or, if its two ports were endpoints of the same
+  path, closes a cycle.
+\item \emph{Emission.} Update the counters and recompute $f_g$ by
+  \eqref{eq:counters}; a newly emitted opening moves from the reservoir to the
+  FIFO by shifting a separator.
+\item \emph{Forced joins.} While both FIFOs of an owner are nonempty, cap their
+  two oldest ports, which are adjacent at that owner's through seam; first for
+  $P$, then for $Q$. Each point causes at most one join per owner.
+\item \emph{Cycle rule.} Reject if a cycle closed in steps (2) or (4), unless
+  this is the last point of the schedule, exactly one cycle closed, and no port
+  remains; in that case the state is \emph{accepted}.
+\item \emph{Canonicalization.} Rename the retained ports by their positions in
+  the four groups.
+\end{enumerate}
+
+\begin{lemma}[Four-seam invariant]
+\label{lem:seams}
+\lean{Meanders.FirstCrossing.adjacentCup_representsPaths, Meanders.FirstCrossing.adjacentCap_representsPaths, Meanders.FirstCrossing.cyclicCheck_iff_noncrossing}
+\leanok
+\uses{def:key, cor:fifo}
+At every stage the pairing of the retained ports into path endpoints is
+noncrossing with respect to the cyclic order $\rev(PL),PR,\rev(QR),QL$, and every
+operation in steps (2) and (4) acts on two adjacent positions of that order.
+\end{lemma}
+
+\begin{proof}
+\leanok
+A point on the left side is adjacent, in the drawing, to the newest opening of
+$PL$ above the line and the newest opening of $QL$ below it; a point on the
+right side is adjacent to the newest openings of $PR$ and $QR$. The oldest
+openings of $PL$ and $PR$ are the outermost pending arches above the line and
+are joined across the middle region; likewise for $QR$ and $QL$ below it. Thus
+the four seams are the four places in the cyclic sequence where a cup,
+replacement or cap can occur (\cref{fig:carrier}). Starting from the empty
+boundary, an adjacent cup adds a pair of neighbouring endpoints, a replacement
+moves one endpoint across an empty seam without changing its order relative to
+the others, and an adjacent cap either splices two paths (the surviving two
+endpoints remain paired with each other in the induced order) or closes a
+cycle. Each preserves noncrossingness. No relation between the two processed
+lengths is used, so the argument covers every stage of the asymmetric schedule.
+\end{proof}
+
+\begin{lemma}[Chronological filter]
+\label{lem:filter}
+\lean{Meanders.FirstCrossing.firstHeightCounters, Meanders.FirstCrossing.Source.prefix_allowed}
+\leanok
+\uses{def:sectors, def:key}
+Let $i_L$ points of the left side have been processed. Then the original grade
+after $i_L$ points equals $i_L-c_{PL}-c_{QL}$, whatever has been processed on
+the right side and whatever joins have been performed. Testing this quantity
+after each left point implements \cref{def:sectors} exactly.
+\end{lemma}
+
+\begin{proof}
+\leanok
+The counters record letters of the original words and are not changed by joins
+or by right-side processing, so $h_P(i_L)=i_L-2c_{PL}$ and likewise for $Q$.
+The first-hit condition is a condition on the prefix heights only.
+\end{proof}
+
+\begin{lemma}[Cycle rule]
+\label{lem:cycle}
+\lean{Meanders.FirstCrossing.saturatedComponent_permanent, Meanders.FirstCrossing.acceptedSourceEquiv, Meanders.FirstCrossing.CoversProcessed.connected_of_one_cycle}
+\leanok
+\uses{lem:cut, cor:fifo, lem:seams}
+A sector-valid source word (\cref{sec:carrier}, first subsection) is accepted
+by the transfer if and only if its matching pair has connected overlay. A
+word with the prescribed lengths and budgets that violates the first-hit
+condition is rejected by step~(1) whatever its connectivity.
+\end{lemma}
+
+\begin{proof}
+\leanok
+For a sector-valid word the grade tests of step~(1) pass at every left point
+(\cref{lem:filter}), so acceptance is decided by the cycle rule alone. Every
+edge inserted by the transfer is an edge of the final incidence graph
+(\cref{lem:cut,cor:fifo}). If a cycle closes before the last point, its nodes
+all have degree $2$ and no later edge can attach to it; since the last point
+still adds a vertex edge outside it, the final graph is disconnected. If the
+final graph is connected it is a single cycle, and any cycle of a subgraph of a
+cycle is the whole cycle, so the only closure happens at the last operation, and
+then no port remains. Conversely a final state with exactly one closure and no
+ports is connected. Since the schedule is deterministic and the cut bijection
+recovers the source from its four half words, each source word has exactly
+one label history, so accepted histories and connected pairs correspond
+bijectively.
+\end{proof}
+
+\begin{lemma}[Future equivalence]
+\label{lem:future}
+\lean{Meanders.FirstCrossing.stateFutureEquiv}
+\leanok
+\uses{def:key, lem:filter, lem:cycle, lem:seams}
+Two partial source words of the same sector that reach the same stage with the
+same key have the same set of legal labelled continuations, with the same
+acceptance decisions.
+\end{lemma}
+
+\begin{proof}
+\leanok
+The stage and the counters determine all group lengths, separators, budgets and
+reservoir tops by \eqref{eq:counters}, so every feasibility test in step (1),
+the positions used in steps (2) and (4), the emissions in step (3) and the
+filter of \cref{lem:filter} coincide. The pairing determines whether a cap
+splices or closes, hence the cycle rule. The successors again share a key, and
+induction on the remaining schedule finishes the proof.
+\end{proof}
+
+\subsection{The transfer}
+
+For each sector the algorithm maintains a \emph{layer}: a list of distinct
+keys sorted lexicographically, each with an integer weight $C$ (and a second
+integer $E$ for the open observer of \cref{sec:open}). The initial layer is the
+empty key with weight $1$. For each point of the schedule, every key emits up
+to four successors, one per label; the successors are sorted and equal keys
+are merged by adding weights. After the last point, the accepted keys contribute their weight to the sector
+total; there is at most one such key, the \emph{terminal key}, whose four
+counters equal the four down budgets and whose pairing is empty (it is not the
+initial empty key, whose counters are zero). By
+\cref{lem:future} the weight of a key equals the number of partial source
+words reaching it, so the sector total is the number of connected pairs in the
+sector; by \cref{lem:partition} the sum over \LOW\ and all admissible sectors is
+$\Closed(n)$. Sectors are processed one after another; two logical layers are alive at
+any time, together with the $O(M)$ working storage of the $M$ emitted records
+and their sort, where $M$ is at most four times the current key count.

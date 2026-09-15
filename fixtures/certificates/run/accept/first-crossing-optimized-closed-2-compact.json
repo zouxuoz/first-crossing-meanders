@@ -1,0 +1,120 @@
+{
+  "kind": "run",
+  "version": 1,
+  "profile": "compact",
+  "problem": "closed",
+  "algorithm": "first_crossing_optimized",
+  "n": 2,
+  "count": 2,
+  "representation": "first-crossing-lower-jet",
+  "layers": [
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "765bdb3b1731b5a3b835cb6bac6476050165b0a58f4d709da65de5c7bb74d749"
+    },
+    {
+      "rows": 1,
+      "bytes": 16,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "99dbf6ed51c82c6f3ad1f9d19735317e1f6af15e6e55fb2d1ddbe655052f45ee"
+    },
+    {
+      "rows": 2,
+      "bytes": 32,
+      "ordinary": 2,
+      "symmetric": null,
+      "lowerReturns": 1,
+      "sha256": "0633adcf6b778dc488df05e71c616a4534b5c8d7ba91bb6c9bde01d5b49f148e"
+    },
+    {
+      "rows": 1,
+      "bytes": 16,
+      "ordinary": 2,
+      "symmetric": null,
+      "lowerReturns": 1,
+      "sha256": "e6fdb311c8b9573c22a90e915f6efc35cee6cb9939476ee7618cc1ba6bd1bbd9"
+    },
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 2,
+      "symmetric": null,
+      "lowerReturns": 3,
+      "sha256": "2a6420bcbd7f972e7db52af51ba1f812e6d75eb27b2c049a443f107395247470"
+    },
+    {
+      "rows": 1,
+      "bytes": 13,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "765bdb3b1731b5a3b835cb6bac6476050165b0a58f4d709da65de5c7bb74d749"
+    },
+    {
+      "rows": 1,
+      "bytes": 16,
+      "ordinary": 1,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "99dbf6ed51c82c6f3ad1f9d19735317e1f6af15e6e55fb2d1ddbe655052f45ee"
+    },
+    {
+      "rows": 0,
+      "bytes": 0,
+      "ordinary": 0,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "rows": 0,
+      "bytes": 0,
+      "ordinary": 0,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "rows": 0,
+      "bytes": 0,
+      "ordinary": 0,
+      "symmetric": null,
+      "lowerReturns": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "root": "a70a8df6e97d955ed59ccc97b68d934c198b2a8cb421a5bc0158e3abbba3bca7",
+  "firstCrossing": {
+    "nativeOrder": 2,
+    "threshold": 2,
+    "closed": 2,
+    "openEven": 3,
+    "sectors": [
+      {
+        "sector": {
+          "kind": "low"
+        },
+        "ordinary": 2,
+        "lowerReturns": 3,
+        "bonusContribution": 0
+      },
+      {
+        "sector": {
+          "kind": "high",
+          "cut": 2,
+          "upper": 2,
+          "lower": 2
+        },
+        "ordinary": 0,
+        "lowerReturns": 0,
+        "bonusContribution": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+\section{Formalization, implementation and evidence}
+\label{sec:evidence}
+
+\subsection{Lean formalization}
+
+The reference evaluator's correctness, the width bounds and a
+carrier-cardinality bound with the exponential factors of \cref{thm:main}
+have been formalized in Lean~4 with Mathlib \cite{Moura2021Lean4,mathlib2020};
+the bit-time and bit-space clause of \cref{thm:main} is proved on paper in
+\cref{sec:width} and has no formal counterpart. The formal statements follow
+the sections above:
+the partition (\lean{Meanders.FirstCrossing.firstHeightPartition}\texttt{firstHeightPartition}), the cut bijection
+(\lean{Meanders.FirstCrossing.asymmetricCutEquiv}\texttt{asymmetricCutEquiv}), the forced prefix and FIFO joins
+(\lean{Meanders.FirstCrossing.forcedPrefix_exact}\texttt{forcedPrefix\_exact}, \lean{Meanders.FirstCrossing.forcedFIFO_sound}\texttt{forcedFIFO\_sound}), the exterior cut
+bijection (\lean{Meanders.FirstCrossing.exteriorArchCutEquiv}\texttt{exteriorArchCutEquiv}, \lean{Meanders.FirstCrossing.exteriorCount_cut}\texttt{exteriorCount\_cut}), the
+key-level future equivalence (\lean{Meanders.FirstCrossing.stateFutureEquiv}\texttt{stateFutureEquiv}), the bijection between
+accepted native words and connected sources (\lean{Meanders.FirstCrossing.acceptedSourceEquiv}\texttt{acceptedSourceEquiv}), the
+paired layer invariant (\lean{Meanders.FirstCrossing.jointLayer_invariant}\texttt{jointLayer\_invariant}) and joint correctness
+(\lean{Meanders.FirstCrossing.evaluateJoint_correct}\texttt{evaluateJoint\_correct}, \lean{Meanders.FirstCrossing.count_eq}\texttt{count\_eq}). The correctness statements
+are proved against the independent public definitions of $\Closed$ and $\Open$
+of the development (the combinatorial models of \cref{sec:prelim}), including
+the conventions $\Closed(0)=0$, $\Open(0)=1$ and the parity dispatch
+\eqref{eq:odd}. \Cref{app:lean} lists the supporting declarations for each
+statement of this paper.
+
+The formal resource statements are the width bounds
+(\lean{Meanders.FirstCrossing.low_geometry_port_bound}\texttt{low\_geometry\_port\_bound}: at most $2(K-1)$ ports in \LOW;
+\lean{Meanders.FirstCrossing.high_geometry_port_bound}\texttt{high\_geometry\_port\_bound}: at most $2(n-K)+2$ ports at every
+stage of a \HIGH\ sector) and the carrier-cardinality bounds
+\lean{Meanders.FirstCrossing.carrierCard_le}\texttt{carrierCard\_le},
+\lean{Meanders.FirstCrossing.low_carrierCard_le}\texttt{low\_carrierCard\_le} and
+\lean{Meanders.FirstCrossing.high_carrierCard_le}\texttt{high\_carrierCard\_le}, which bound the number of keys passing the
+validity test of a stage by $(n+1)^{4}K\,4^{K-1}$ in \LOW\ and
+$(n+1)^{4}(n-K+2)\,4^{n-K+1}$ in a \HIGH\ sector. These fix the exponential
+factors $4^{K-1}$ and $4^{n-K}$ of \cref{thm:main}; their polynomial
+prefactors are looser than those of \cref{prop:carrier}. Every successor
+produced by the formal step passes that validity test and layers are merged
+by key, so a layer never holds more keys than this bound, but the layer-level
+inequality itself, the polynomial-factor bit-time and bit-space accounting of
+\cref{thm:cost} and \cref{cor:balance}, and the sorting and arithmetic costs
+are proved on paper only; no claim is made about compiled code, allocator
+behaviour or resident memory. The development uses
+only the standard axioms \texttt{propext}, \texttt{Classical.choice} and
+\texttt{Quot.sound}, checked by an axiom audit.
+
+\subsection{Implementation and certificates}
+
+Two Rust evaluators implement the transfer. The \emph{reference} uses explicit
+arrays, arbitrary-precision weights and runtime assertions of the invariants.
+The \emph{production} evaluator packs a key into $128$ bits (the noncrossing
+pairing as a Dyck word of at most $64$ ports and the four counters), performs
+the surgery directly on the word through transition plans compiled once per
+stage and counter block, keeps fixed-width weights that are widened in place
+when a per-layer mass bound says a sum might overflow, and partitions each
+layer into $256$ key-hashed buckets processed by a bounded number of workers
+(at most one per bucket; small layers run on one worker); sectors whose port
+bound exceeds $64$ fall back to the reference. Layer order and all integers
+are designed to be independent of the worker count, and the shipped tests
+check this at small orders for worker counts up to $257$; it is a tested
+property, not a proved one. A Lean theorem
+(\lean{Meanders.FirstCrossing.Packed.decode_wordSuccessors}\texttt{Packed.decode\_wordSuccessors}) proves that the packed codec refines the
+reference transitions label by label; the production word surgery itself is
+validated differentially, not verified.
+
+Both evaluators can emit a sector certificate: the ordered sector metadata
+and, per sector, the terminal ordinary total, the unbonused lower-return total
+and the bonus, with either every sorted layer retained (full mode) or omitted
+layers regenerated by the checker (compact mode). In both modes the checker
+re-derives every legal successor and both channels layer by layer; digests are
+integrity commitments only. The soundness theorem
+(\lean{Meanders.Certify.FirstCrossingRun.check_joint_correct}\texttt{Meanders.Certify.FirstCrossingRun.check\_joint\_correct}) states that a
+certificate accepted by this checker establishes both public counts. A
+count-only manifest carries the claimed integers and no layer evidence;
+checking it means re-running the reference evaluator. Four evidence classes
+therefore arise for a reported value, from weakest to strongest:
+\begin{enumerate}[nosep,label=(E\arabic*)]
+\item \emph{production output only}: the integer returned by one run of a
+  producer, without any independent check;
+\item \emph{agreement with an independently known value}, here the OEIS
+  terms of Jensen and Howroyd;
+\item \emph{acceptance of a full or compact certificate by the compiled
+  checker};
+\item \emph{kernel replay of a concrete numerical instance}, carried out
+  for $\Closed(2)=2$, $\Open(2)=1$ and $\Open(4)=3$.
+\end{enumerate}
+The shipped pipeline exercises (E3) through order $8$ and (E2) wherever a
+pinned value exists. The production series of \cref{tab:campaign} consists
+of count-only executions: its values within the published OEIS range are at
+level (E2), and its values beyond that range are at level (E1).
+
+\subsection{Validation}
+
+\paragraph{Shipped checks.} The repository's tests and pipeline compare both
+First-Crossing producers against the brute-force oracle at small orders and
+at every threshold, verify full and compact certificates with the compiled
+checker, kernel-replay the small instances above, and compare the producers
+with the pinned OEIS values \cite{OEIS_A005315,OEIS_A005316}: $\Closed(n)$
+for $1\le n\le28$ and $\Open(m)$ for $0\le m\le55$. ($\Closed(0)$ is
+excluded from the comparison: this paper and the development use
+$\Closed(0)=0$, whereas A005315 lists $1$ at index $0$; the open
+convention $\Open(0)=1$ agrees with A005316.) The exterior identity of
+\cref{lem:exterior} is checked on every matching and every cut through
+$n=8$ ($33{,}097$ cases).
+
+\paragraph{Development history (not shipped).} Before implementation the
+mathematics was re-derived in an adversarial audit whose independent
+constructor agreed with a literal enumeration of all ordered pairs through
+$n=9$ on every candidate sector; during development the Rust evaluators also
+agreed with an independent Python reference, with two earlier
+connectivity-transfer evaluators through $n=14$, and with the literal
+enumeration through $n=8$ at every threshold through $n=6$. These checks and
+the earlier evaluators are author-reported history and are not part of the
+repository; they cannot be rerun by a reader and are not counted as evidence
+above.
+
+\subsection{Measurements}
+
+\Cref{tab:campaign} reports count-only wall time and peak resident memory of
+the production evaluator in one fixed sweep: one repository revision, one
+release binary, one machine (AWS EC2 \texttt{r7a.32xlarge}, $128$ vCPUs,
+$986$\,GiB, Ubuntu~24.04, rustc~1.98), run on 2026-09-14 through
+\texttt{scripts/evaluate.py} at every native order $0\le n\le30$, one fresh
+process per order, count-only manifests and no in-process golden value. Each
+run at $n\ge1$ returns $\Closed(n)$, $\Open(2n-1)$ and $\Open(2n)$; the run
+at $n=0$ returns $\Closed(0)$ and $\Open(0)$ only. The sweep requested $96$
+workers, but the implementation of that revision limited the effective
+worker set to $64$ (small layers run on one worker); the limit has since been
+raised to one worker per bucket, and the table is labelled with the effective
+count. Orders below $23$ each took under $13$ seconds and are omitted
+from the table; the whole series took $40.8$ minutes of evaluator wall time.
+The timing boundary is the child process: builds and any later verification
+are excluded, while serialization and output of the count manifests are
+included. These figures describe the measured range only and say nothing
+about the asymptotic exponent, which is the subject of \cref{thm:cost}. The
+run records (\texttt{meta.json} and the count manifests of every order) are
+provided in the production-run archive accompanying the tagged release
+described in \cref{app:repro}, rather than in the source tree.
+
+\begin{table}[t]
+\centering
+\caption{Production evaluator on \texttt{r7a.32xlarge}, count only, one
+fresh process per order; $96$ workers requested, $64$ effective (the worker
+limit of the measured revision); every run also produced $\Open(2n-1)$
+and $\Open(2n)$. Memory is the reported peak resident set size in MiB.}
+\label{tab:campaign}
+\begin{tabular}{rrrrr}
+\toprule
+$n$ & workers (req./eff.) & samples & wall time (s) & peak RSS (MiB) \\
+\midrule
+23 & 96/64 & 1 & 12.75 & 2738 \\
+24 & 96/64 & 1 & 15.29 & 3134 \\
+25 & 96/64 & 1 & 40.73 & 11002 \\
+26 & 96/64 & 1 & 50.74 & 8933 \\
+27 & 96/64 & 1 & 155.24 & 28840 \\
+28 & 96/64 & 1 & 191.08 & 27353 \\
+29 & 96/64 & 1 & 787.99 & 86620 \\
+30 & 96/64 & 1 & 1172.89 & 91333 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The rows of \cref{tab:campaign} grow in a parity staircase. With
+$K=\lfloor n/2\rfloor+1$ and $d=n-K$ we have $d(2m)=m-1$ and
+$d(2m+1)=d(2m+2)=m$, so the \HIGH\ boundary width $2d+O(1)$ of
+\cref{lem:highwidth} increases on every even-to-odd step and is unchanged on
+every odd-to-even step, and the exponential factor $4^{d}$ of the carrier
+bound of \cref{prop:carrier} quadruples or stays fixed accordingly (its
+polynomial prefactor changes at every step). The measured peak
+RSS of $26.7$\,GiB at $n=28$, $84.6$\,GiB at $n=29$ and $89.2$\,GiB at
+$n=30$ is consistent with this staircase; the theorem bounds the number of
+keys, not the resident memory of a process, and no more than consistency is
+claimed. Measured wall-time ratios need not follow the exponential factor
+either: from $n=28$ to $n=30$ the wall time grew by a factor of about $6.1$,
+against $4$ for $4^{d}$ alone, and the polynomial factors of \cref{thm:cost}
+together with implementation effects (bucket scheduling, memory traffic,
+weight widening) account for such differences within the measured range.
+
+The values $\Closed(n)$ for $1\le n\le28$ and $\Open(m)$ for $0\le m\le55$
+are listed in OEIS \cite{OEIS_A005315,OEIS_A005316} (the first $24$ closed
+and $44$ open terms are due to Jensen \cite{Jensen2000}, the remainder of
+both tables to Howroyd). Every value of the series in that range agrees with
+the listed term (level (E2) above; $\Closed(0)$ is excluded by convention as
+explained under Shipped checks). One run at rank $r\ge1$ returns
+$\Closed(r)$, its alias $\Open(2r-1)=\Closed(r)$, and $\Open(2r)$, so ranks
+$27$ to $30$ returned
+\begin{align*}
+\Closed(27)&=\Open(53)=987{,}975{,}910{,}996{,}038{,}555{,}989{,}486,\\
+\Open(54)&=2{,}594{,}805{,}632{,}585{,}289{,}523{,}975{,}474,\\
+\Closed(28)&=\Open(55)=10{,}726{,}008{,}363{,}361{,}842{,}734{,}385{,}644,\\
+\Open(56)&=28{,}235{,}899{,}288{,}344{,}793{,}178{,}333{,}732,\\
+\Closed(29)&=\Open(57)=116{,}936{,}079{,}373{,}841{,}873{,}422{,}508{,}566,\\
+\Open(58)&=308{,}496{,}356{,}015{,}441{,}090{,}010{,}351{,}094,\\
+\Closed(30)&=\Open(59)=1{,}279{,}842{,}888{,}607{,}976{,}889{,}797{,}535{,}044,\\
+\Open(60)&=3{,}383{,}262{,}281{,}572{,}596{,}355{,}695{,}881{,}934.
+\end{align*}
+Within the published OEIS range the sweep agrees term for term:
+$\Closed(27)$, $\Closed(28)$ and $\Open(53)$ to $\Open(55)$ reproduce the
+listed values. $\Closed(29)$, $\Closed(30)$ and $\Open(56)$ to $\Open(60)$
+are not listed in either OEIS entry as of 2026-09-14. They are fixed-sweep
+production outputs at level (E1): no independent numerical validation, no
+second implementation result and no certificate replay is claimed for them.
+The odd values $\Open(57)$ and $\Open(59)$ are aliases of $\Closed(29)$ and
+$\Closed(30)$ written by the same run and provide no independent arithmetic
+check. The values above make the computed Open range continuous through
+$m=60$. Jensen's 2025 slides \cite{Jensen2025} analyse an open series of
+about $60$ terms and show closed-data plots through $27$ terms, so comparable
+values exist in unpublished form; whether any value above has been published
+elsewhere has not been verified, and no priority is claimed.
+
+At small orders the earlier (unshipped) connectivity transfers were faster
+in wall time by orders of magnitude in development measurements. Such finite
+measurements establish neither a practical crossover nor an asymptotic
+wall-time claim; the contribution of this paper is the proved bound.

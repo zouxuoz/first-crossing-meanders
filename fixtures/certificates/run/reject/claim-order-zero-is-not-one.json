@@ -1,0 +1,12 @@
+{
+  "kind": "run",
+  "version": 1,
+  "profile": "compact",
+  "problem": "closed",
+  "algorithm": "brute_force",
+  "n": 0,
+  "count": 1,
+  "representation": "count",
+  "layers": [],
+  "root": "fc4108132338b1a71292740bcb98ec9d65c923847d46aa221bf2f3dea029b922"
+}

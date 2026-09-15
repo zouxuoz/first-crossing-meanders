@@ -118,16 +118,14 @@ above.
 \Cref{tab:campaign} reports count-only wall time and peak resident memory of
 the production evaluator in one fixed sweep: one repository revision, one
 release binary, one machine (AWS EC2 \texttt{r7a.32xlarge}, $128$ vCPUs,
-$986$\,GiB, Ubuntu~24.04, rustc~1.98), run on 2026-09-14 through
+Linux x86-64, rustc~1.98), run on 2026-09-15 through
 \texttt{scripts/evaluate.py} at every native order $0\le n\le30$, one fresh
 process per order, count-only manifests and no in-process golden value. Each
 run at $n\ge1$ returns $\Closed(n)$, $\Open(2n-1)$ and $\Open(2n)$; the run
-at $n=0$ returns $\Closed(0)$ and $\Open(0)$ only. The sweep requested $96$
-workers, but the implementation of that revision limited the effective
-worker set to $64$ (small layers run on one worker); the limit has since been
-raised to one worker per bucket, and the table is labelled with the effective
-count. Orders below $23$ each took under $13$ seconds and are omitted
-from the table; the whole series took $40.8$ minutes of evaluator wall time.
+at $n=0$ returns $\Closed(0)$ and $\Open(0)$ only. Every run records $96$
+requested and effective workers in its metadata; small layers run on one
+worker. Orders below $23$ each took under $7$ seconds and are omitted
+from the table; the whole series took $36.6$ minutes of evaluator wall time.
 The timing boundary is the child process: builds and any later verification
 are excluded, while serialization and output of the count manifests are
 included. These figures describe the measured range only and say nothing
@@ -139,22 +137,22 @@ described in \cref{app:repro}, rather than in the source tree.
 \begin{table}[t]
 \centering
 \caption{Production evaluator on \texttt{r7a.32xlarge}, count only, one
-fresh process per order; $96$ workers requested, $64$ effective (the worker
-limit of the measured revision); every run also produced $\Open(2n-1)$
-and $\Open(2n)$. Memory is the reported peak resident set size in MiB.}
+fresh process per order and an effective worker limit of $96$ (small layers
+run on one worker); every run also produced $\Open(2n-1)$ and $\Open(2n)$.
+Memory is the reported peak resident set size in MiB.}
 \label{tab:campaign}
 \begin{tabular}{rrrrr}
 \toprule
-$n$ & workers (req./eff.) & samples & wall time (s) & peak RSS (MiB) \\
+$n$ & workers (effective) & samples & wall time (s) & peak RSS (MiB) \\
 \midrule
-23 & 96/64 & 1 & 12.75 & 2738 \\
-24 & 96/64 & 1 & 15.29 & 3134 \\
-25 & 96/64 & 1 & 40.73 & 11002 \\
-26 & 96/64 & 1 & 50.74 & 8933 \\
-27 & 96/64 & 1 & 155.24 & 28840 \\
-28 & 96/64 & 1 & 191.08 & 27353 \\
-29 & 96/64 & 1 & 787.99 & 86620 \\
-30 & 96/64 & 1 & 1172.89 & 91333 \\
+23 & 96 & 1 & 13.16 & 3578 \\
+24 & 96 & 1 & 15.43 & 4388 \\
+25 & 96 & 1 & 37.95 & 13788 \\
+26 & 96 & 1 & 46.02 & 15187 \\
+27 & 96 & 1 & 148.06 & 46097 \\
+28 & 96 & 1 & 178.99 & 37599 \\
+29 & 96 & 1 & 733.43 & 119100 \\
+30 & 96 & 1 & 999.39 & 120072 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -166,11 +164,11 @@ $d(2m+1)=d(2m+2)=m$, so the \HIGH\ boundary width $2d+O(1)$ of
 every odd-to-even step, and the exponential factor $4^{d}$ of the carrier
 bound of \cref{prop:carrier} quadruples or stays fixed accordingly (its
 polynomial prefactor changes at every step). The measured peak
-RSS of $26.7$\,GiB at $n=28$, $84.6$\,GiB at $n=29$ and $89.2$\,GiB at
+RSS of $36.7$\,GiB at $n=28$, $116.3$\,GiB at $n=29$ and $117.3$\,GiB at
 $n=30$ is consistent with this staircase; the theorem bounds the number of
 keys, not the resident memory of a process, and no more than consistency is
 claimed. Measured wall-time ratios need not follow the exponential factor
-either: from $n=28$ to $n=30$ the wall time grew by a factor of about $6.1$,
+either: from $n=28$ to $n=30$ the wall time grew by a factor of about $5.6$,
 against $4$ for $4^{d}$ alone, and the polynomial factors of \cref{thm:cost}
 together with implementation effects (bucket scheduling, memory traffic,
 weight widening) account for such differences within the measured range.

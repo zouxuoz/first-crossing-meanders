@@ -1,5 +1,16 @@
 # First-Crossing meanders
 
+<details>
+<summary><strong>AI assistance disclosure</strong></summary>
+
+This project was developed with substantial assistance from AI agents (GPT-6-Astra, GPT-5.6-Sol, Fable 5.1), including research, proof development, Lean formalization, implementation, testing, literature review, and adversarial review.
+
+The released paper presents the resulting mathematical argument in human-readable form. The stated correctness and carrier bounds are formalized in Lean, while the production implementation is validated as described in the paper.
+
+The author takes responsibility for the claims, artifact, and presentation.
+
+</details>
+
 Exact closed and open meander counts, computed in Rust and verified in Lean.
 Lean proves the shared First-Crossing evaluator correct and bounds each layer
 by `O*(2^n)` keys at closed order n. The [preprint](blueprint/src/print.tex)
